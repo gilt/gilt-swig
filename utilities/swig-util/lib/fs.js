@@ -25,7 +25,7 @@ module.exports = function (swig) {
     //https://raw.githubusercontent.com/substack/node-mkdirp/master/index.js
     mkdir: function (p, mode, made) {
       if (mode === undefined) {
-        mode = 0o777 & (~process.umask());
+        mode = 0777 & (~process.umask());
       }
       if (!made) made = null;
 
