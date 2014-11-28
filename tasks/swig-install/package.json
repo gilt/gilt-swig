@@ -1,7 +1,7 @@
 {
   "name": "swig-install",
   "description": "",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "adm-zip" : "*",
-    "co" : "*",
+    "co" : "3.x",
     "co-exec" : "*",
     "glob" : "*",
     "globby" : "*",
