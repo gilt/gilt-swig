@@ -30,8 +30,10 @@ module.exports = function (gulp, swig) {
     nyanPath = path.join(mochaPath, '/lib/reporters/nyan.js'),
 
     chaiPath = path.dirname(require.resolve('chai')),
+    sinonPath = path.join(path.dirname(require.resolve('sinon')), '../pkg'),
     runnerPath = path.join(__dirname, '../templates/mocha-runner.html'),
     runner = fs.readFileSync(runnerPath, 'utf-8'),
+    specFiles = [],
     specs = [],
     scripts = [],
     specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
@@ -50,25 +52,36 @@ module.exports = function (gulp, swig) {
 
   swig.log.success('', 'Enumerating Specs...');
 
-  specs = glob.sync(path.join(specsPath, '/**/*.js'));
+  // enum all of the files in the specs directory
+  specFiles = glob.sync(path.join(specsPath, '/**/*.js'));
+
+  // the file names should correspond with the name of the module used in gilt.define
+  // this is used to `require` the test files and THEN launch mocha
+  _.each(specFiles, function (file) {
+    specs.push('\'' + path.basename(file, path.extname(file)) + '\'');
+  });
 
   swig.log.success('', 'Rendering Runner...\n');
 
   runner = mustache.render(runner, {
     baseUrl: srcPath,
     scripts: scripts,
-    specs: specs,
+    specs: specs.join(','),
+    specFiles: specFiles,
     mochaPath: mochaPath,
-    chaiPath: chaiPath
+    chaiPath: chaiPath,
+    sinonPath: sinonPath
   });
 
   swig.log.task('Running PhantomJS+Mocha');
+  swig.log('');
 
   return file('runner.html', runner, { src: true })
     .pipe(gulp.dest(specsPath))
     .pipe(mocha({
       reporter: nyanPath,
-      silent: true
+      silent: true,
+      phantomjs: { webSecurityEnabled: false }
     }));
 
 };

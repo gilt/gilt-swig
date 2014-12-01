@@ -9,6 +9,8 @@
   </head>
   <body>
     <div id="mocha"></div>
+
+    <script src="{{{sinonPath}}}/sinon.js"></script>
     <script src="{{{mochaPath}}}/mocha.js"></script>
     <script src="{{{chaiPath}}}/chai.js"></script>
 
@@ -27,12 +29,24 @@
             // allows mocha to continue to run tests after the first failure.
             mocha.bail(false);
 
-            if (window.mochaPhantomJS) {
-              mochaPhantomJS.run();
-            }
-            else {
-              mocha.run();
-            }
+            var specs = [{{{specs}}}];
+
+            // we're going to wire up some fake defines here.
+            // these will be ignored if they've already been defined.
+            // allows us to include js files with no defines, seamlessly.
+            specs.forEach(function (name) {
+              define(name, function () {});
+            });
+
+            require(specs, function () {
+
+              if (window.mochaPhantomJS) {
+                mochaPhantomJS.run();
+              }
+              else {
+                mocha.run();
+              }
+            });
           }
         };
     </script>
@@ -41,9 +55,9 @@
     <script src="{{{.}}}"></script>
   {{/scripts}}
 
-  {{#specs}}
+  {{#specFiles}}
     <script src="{{{.}}}"></script>
-  {{/specs}}
+  {{/specFiles}}
 
   </body>
 </html>
