@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mocha Test Runner</title>
+    <link rel="stylesheet" href="{{{mochaPath}}}/mocha.css">
+  </head>
+  <body>
+    <div id="mocha"></div>
+    <script src="{{{mochaPath}}}/mocha.js"></script>
+    <script src="{{{chaiPath}}}/chai.js"></script>
+
+    <script>
+      var expect = chai.expect,
+        assert = chai.assert;
+        require = {
+          baseUrl: '{{{baseUrl}}}',
+          callback: function () {
+
+            mocha.setup({
+              ui: 'bdd',
+              ignoreLeaks: true
+            });
+
+            // allows mocha to continue to run tests after the first failure.
+            mocha.bail(false);
+
+            if (window.mochaPhantomJS) {
+              mochaPhantomJS.run();
+            }
+            else {
+              mocha.run();
+            }
+          }
+        };
+    </script>
+
+  {{#scripts}}
+    <script src="{{{.}}}"></script>
+  {{/scripts}}
+
+  {{#specs}}
+    <script src="{{{.}}}"></script>
+  {{/specs}}
+
+  </body>
+</html>

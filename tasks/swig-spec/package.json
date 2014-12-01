@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -38,7 +38,19 @@
     "node": ">= 0.11.x"
   },
   "dependencies": {
-    "underscore" : "*"
+    "chai": "*",
+    "glob" : "*",
+    "gulp-file": "*",
+    "gulp-mocha-phantomjs": "0.5.x",
+    "mustache": "*",
+    "through2" : "*",
+    "underscore" : "*",
+
+    "internal.browser_detect" : "0.1.x",
+    "internal.json" : "2.0.x",
+    "internal.modernizr" : "2.5.x",
+    "internal.require" : "2.1.x",
+    "internal.gilt_require" : "0.0.x"
   },
   "devDependencies": {
 

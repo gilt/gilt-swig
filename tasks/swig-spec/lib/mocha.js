@@ -1,0 +1,74 @@
+'use strict';
+/*
+ ________  ___       __   ___  ________
+|\   ____\|\  \     |\  \|\  \|\   ____\
+\ \  \___|\ \  \    \ \  \ \  \ \  \___|
+ \ \_____  \ \  \  __\ \  \ \  \ \  \  ___
+  \|____|\  \ \  \|\__\_\  \ \  \ \  \|\  \
+    ____\_\  \ \____________\ \__\ \_______\
+   |\_________\|____________|\|__|\|_______|
+   \|_________|
+
+   It's delicious.
+   Brought to you by the fine folks at Gilt (http://github.com/gilt)
+*/
+
+module.exports = function (gulp, swig) {
+
+  var _ = require('underscore'),
+    mocha = require('gulp-mocha-phantomjs'),
+    fs = require('fs'),
+    path = require('path'),
+    through = require('through2'),
+    mustache = require('mustache'),
+    file = require('gulp-file'),
+    glob = require('glob'),
+    mochaPath = glob.sync(path.join(__dirname, '../**/mocha'))[0],
+
+    // we have to reference this reporter by file path rather than name
+    // due to a compliation problem with the Prototype
+    nyanPath = path.join(mochaPath, '/lib/reporters/nyan.js'),
+
+    chaiPath = path.dirname(require.resolve('chai')),
+    runnerPath = path.join(__dirname, '../templates/mocha-runner.html'),
+    runner = fs.readFileSync(runnerPath, 'utf-8'),
+    specs = [],
+    scripts = [],
+    specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
+    srcPath;
+
+  if (swig.project.type === 'webapp') {
+    srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name);
+  }
+  else {
+    srcPath = path.join(swig.target.path, 'public/js/');
+  }
+
+  _.each(['browser_detect', 'json', 'modernizr', 'require', 'gilt_require'], function (module) {
+    scripts.push(path.join(__dirname, '../node_modules/internal.' + module, 'js', module + '.js'));
+  })
+
+  swig.log.success('', 'Enumerating Specs...');
+
+  specs = glob.sync(path.join(specsPath, '/**/*.js'));
+
+  swig.log.success('', 'Rendering Runner...\n');
+
+  runner = mustache.render(runner, {
+    baseUrl: srcPath,
+    scripts: scripts,
+    specs: specs,
+    mochaPath: mochaPath,
+    chaiPath: chaiPath
+  });
+
+  swig.log.task('Running PhantomJS+Mocha');
+
+  return file('runner.html', runner, { src: true })
+    .pipe(gulp.dest(specsPath))
+    .pipe(mocha({
+      reporter: nyanPath,
+      silent: true
+    }));
+
+};

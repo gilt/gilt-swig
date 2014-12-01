@@ -43,6 +43,7 @@
     "node": ">= 0.11.x"
   },
   "dependencies": {
+    "co": "3.x.x",
     "underscore" : "*"
   },
   "devDependencies": {

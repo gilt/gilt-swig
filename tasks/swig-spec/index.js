@@ -15,8 +15,29 @@
 
 module.exports = function (gulp, swig) {
 
+  if (!swig.pkg) {
+    return;
+  }
+
   gulp.task('spec', function () {
-    swig.log('Running Specs... (currently disabled)');
+    var defaultSpecLib = 'mocha',
+      specLib = swig.pkg.gilt ? swig.pkg.gilt.specsLibrary || defaultSpecLib : defaultSpecLib;
+
+    swig.log.task('Initializing Specs');
+
+    try {
+      var impl = require('./lib/' + specLib.toLowerCase());
+
+      return impl(gulp, swig);
+    }
+    catch (e) {
+      if (e.code === 'MODULE_NOT_FOUND') {
+        swig.log.error('spec', 'Spec Library: ' + specLib + ', hasn\'t been implemented.');
+      }
+      else {
+        throw e;
+      }
+    }
   });
 
 };
