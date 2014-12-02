@@ -15,25 +15,23 @@
     <script src="{{{chaiPath}}}/chai.js"></script>
 
     <script>
+      mocha.setup({
+        ui: 'bdd',
+        ignoreLeaks: true
+      });
+
+      // allows mocha to continue to run tests after the first failure.
+      mocha.bail(false);
+
       var expect = chai.expect,
-        assert = chai.assert;
+        assert = chai.assert,
+        specs = [{{{specs}}}],
         require = {
           baseUrl: '{{{baseUrl}}}',
           callback: function () {
 
-            mocha.setup({
-              ui: 'bdd',
-              ignoreLeaks: true
-            });
-
-            // allows mocha to continue to run tests after the first failure.
-            mocha.bail(false);
-
-            var specs = [{{{specs}}}];
-
-            // we're going to wire up some fake defines here.
-            // these will be ignored if they've already been defined.
-            // allows us to include js files with no defines, seamlessly.
+            // we're going to wire up some fake defines here. these will be ignored if they've already been defined.
+            // this allows us to include js files from the /spec dir which contain no defines, seamlessly.
             specs.forEach(function (name) {
               define(name, function () {});
             });
