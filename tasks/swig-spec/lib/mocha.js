@@ -23,7 +23,7 @@ module.exports = function (gulp, swig) {
     mustache = require('mustache'),
     file = require('gulp-file'),
     glob = require('glob'),
-    mochaPath = glob.sync(path.join(__dirname, '../**/mocha'))[0],
+    mochaPath = path.dirname(require.resolve('mocha')),
 
     // we have to reference this reporter by file path rather than name
     // due to a compliation problem with the Prototype

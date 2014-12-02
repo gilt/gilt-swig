@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -43,6 +43,7 @@
     "gulp-file": "*",
     "gulp-mocha-phantomjs": "0.5.x",
     "mustache": "*",
+    "mocha": "*",
     "through2" : "*",
     "sinon": "*",
     "underscore" : "*",
