@@ -47,6 +47,7 @@
     "through2" : "*",
     "sinon": "*",
     "underscore" : "*",
+    "mocha":"2.0.x",
 
     "internal.browser_detect" : "0.1.x",
     "internal.json" : "2.0.x",
