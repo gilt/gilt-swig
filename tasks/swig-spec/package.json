@@ -43,6 +43,7 @@
     "gulp-file": "*",
     "gulp-mocha-phantomjs": "0.5.x",
     "gulp-tap": "*",
+    "gulp-util": "*",
     "mustache": "*",
     "mocha": "*",
     "through2" : "*",

@@ -33,6 +33,7 @@ module.exports = function (gulp, swig) {
     catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
         swig.log.error('spec', 'Spec Library: ' + specLib + ', hasn\'t been implemented.');
+        swig.log(e);
       }
       else {
         throw e;

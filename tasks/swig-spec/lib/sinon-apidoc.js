@@ -105,23 +105,25 @@ module.exports = function () {
     });
 
     _.each(apidoc.resources, function (res, name) {
-      var resourcePath = res.path || '';
+      var resourcePath = res.path || '',
+        response;
 
       _.each(res.operations, function (op) {
 
         var operationPath = resourcePath + (op.path || ''),
           keys = _.keys(op.responses),
+          tempResponses,
           responseCode;
 
         responseCode = _.first(keys.filter(function(code) { /^2\d{2}/.test(code); })) || _.first(keys);
         response = fixtures[op.responses[responseCode].type];
 
         if (/^\[.+\]$/.test(op.responses[responseCode].type)) {
-          var results = [];
+          tempResponses = [];
           for (var i = 0; i < (Math.random() + 10); i++) {
-            results.push(response);
+            tempResponses.push(response);
           }
-          response = results;
+          response = tempResponses;
         }
 
         results.push({

@@ -66,7 +66,7 @@ module.exports = function (gulp, swig) {
 
   swig.log.info('', 'Enumerating APIDoc Sinon Servers...');
 
-  gulp.src()
+  gulp.src(path.join(swig.target.path, '/json/sinon/**/*.json'))
     .pipe(sinonApiDoc())
     .pipe(tap(function(file, t) {
       try {
