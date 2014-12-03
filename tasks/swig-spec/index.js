@@ -19,7 +19,7 @@ module.exports = function (gulp, swig) {
     return;
   }
 
-  gulp.task('spec', function () {
+  gulp.task('spec', function (done) {
     var defaultSpecLib = 'mocha',
       specLib = swig.pkg.gilt ? swig.pkg.gilt.specsLibrary || defaultSpecLib : defaultSpecLib;
 
@@ -28,7 +28,7 @@ module.exports = function (gulp, swig) {
     try {
       var impl = require('./lib/' + specLib.toLowerCase());
 
-      return impl(gulp, swig);
+      impl(gulp, swig, done);
     }
     catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {

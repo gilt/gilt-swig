@@ -13,8 +13,10 @@
    Brought to you by the fine folks at Gilt (http://github.com/gilt)
 */
 
-module.exports = function (gulp, swig) {
+module.exports = function (gulp, swig, done) {
 
   swig.log('Preparing Jasmine Specs...');
+
+  done();
 
 };

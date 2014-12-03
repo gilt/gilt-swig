@@ -13,7 +13,7 @@
    Brought to you by the fine folks at Gilt (http://github.com/gilt)
 */
 
-module.exports = function (gulp, swig) {
+module.exports = function (gulp, swig, done) {
 
   var _ = require('underscore'),
     mocha = require('gulp-mocha-phantomjs'),
@@ -40,7 +40,7 @@ module.exports = function (gulp, swig) {
     scripts = [],
     specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
     srcPath,
-    servers = [];
+    servers;
 
   if (swig.project.type === 'webapp') {
     srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name);
@@ -73,30 +73,35 @@ module.exports = function (gulp, swig) {
         var fileServers = JSON.parse(file.contents);
         servers = _.union(servers, fileServers);
       }
-      catch (e) {}
-    }));
+      catch (e) {
+        console.log(e);
+      }
+    }))
+    .on('end', function () {
 
-  swig.log.info('', 'Rendering Runner...\n');
+      swig.log.info('', 'Rendering Runner...\n');
 
-  runner = mustache.render(runner, {
-    baseUrl: srcPath,
-    scripts: scripts,
-    specs: specs.join(','),
-    specFiles: specFiles,
-    mochaPath: mochaPath,
-    chaiPath: chaiPath,
-    sinonPath: sinonPath
-  });
+      runner = mustache.render(runner, {
+        baseUrl: srcPath,
+        scripts: scripts,
+        specs: specs.join(','),
+        specFiles: specFiles,
+        mochaPath: mochaPath,
+        chaiPath: chaiPath,
+        sinonPath: sinonPath,
+        servers: servers
+      });
 
-  swig.log.task('Running PhantomJS+Mocha');
-  swig.log('');
+      swig.log.task('Running PhantomJS+Mocha');
+      swig.log('');
 
-  return file('runner.html', runner, { src: true })
-    .pipe(gulp.dest(specsPath))
-    .pipe(mocha({
-      reporter: nyanPath,
-      silent: true,
-      phantomjs: { webSecurityEnabled: false }
-    }));
-
+      file('runner.html', runner, { src: true })
+        .pipe(gulp.dest(specsPath))
+        .pipe(mocha({
+          reporter: nyanPath,
+          silent: true,
+          phantomjs: { webSecurityEnabled: false }
+        }))
+        .on('end', done);
+    });
 };

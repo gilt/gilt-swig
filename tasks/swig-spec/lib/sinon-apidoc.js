@@ -130,7 +130,9 @@ module.exports = function () {
           method: op.method,
           path: pathToRegex(operationPath),
           responseCode: responseCode,
-          responseData: response
+          // we have to do this because mustache will be expecting a string,
+          // otherwise it'll render as [object Object]
+          responseData: JSON.stringify(response)
         });
       });
     });
