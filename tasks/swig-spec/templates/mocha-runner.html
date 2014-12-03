@@ -23,6 +23,20 @@
       // allows mocha to continue to run tests after the first failure.
       mocha.bail(false);
 
+      function initMockServer (server) {
+        if (typeof server === 'undefined') {
+          server = sinon.fakeServer.create();
+        }
+        {{#servers}}
+        server.respondWith('{{method}}', new RegExp('{{{path}}}'), [
+          {{responseCode}},
+          { 'Content-Type': 'application/json' },
+          '{{{responseData}}}'
+        ]);
+        {{/servers}}
+        return server;
+      }
+
       var expect = chai.expect,
         assert = chai.assert,
         specs = [{{{specs}}}],

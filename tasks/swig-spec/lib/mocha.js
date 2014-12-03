@@ -23,6 +23,8 @@ module.exports = function (gulp, swig) {
     mustache = require('mustache'),
     file = require('gulp-file'),
     glob = require('glob'),
+    sinonApiDoc = require('./sinon-apidoc.js'),
+    tap = require('gulp-tap'),
     mochaPath = path.dirname(require.resolve('mocha')),
 
     // we have to reference this reporter by file path rather than name
@@ -37,7 +39,8 @@ module.exports = function (gulp, swig) {
     specs = [],
     scripts = [],
     specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
-    srcPath;
+    srcPath,
+    servers = [];
 
   if (swig.project.type === 'webapp') {
     srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name);
@@ -50,7 +53,7 @@ module.exports = function (gulp, swig) {
     scripts.push(path.join(__dirname, '../node_modules/internal.' + module, 'js', module + '.js'));
   })
 
-  swig.log.success('', 'Enumerating Specs...');
+  swig.log.info('', 'Enumerating Specs...');
 
   // enum all of the files in the specs directory
   specFiles = glob.sync(path.join(specsPath, '/**/*.js'));
@@ -61,7 +64,19 @@ module.exports = function (gulp, swig) {
     specs.push('\'' + path.basename(file, path.extname(file)) + '\'');
   });
 
-  swig.log.success('', 'Rendering Runner...\n');
+  swig.log.info('', 'Enumerating APIDoc Sinon Servers...');
+
+  gulp.src()
+    .pipe(sinonApiDoc())
+    .pipe(tap(function(file, t) {
+      try {
+        var fileServers = JSON.parse(file.contents);
+        servers = _.union(servers, fileServers);
+      }
+      catch (e) {}
+    }));
+
+  swig.log.info('', 'Rendering Runner...\n');
 
   runner = mustache.render(runner, {
     baseUrl: srcPath,
