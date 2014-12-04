@@ -71,7 +71,7 @@ module.exports = function (gulp, swig, done) {
     .pipe(tap(function(file, t) {
       try {
         var fileServers = JSON.parse(file.contents);
-        servers = _.union(servers, fileServers);
+        servers = _.filter(_.union(servers, fileServers), function(a) { return typeof a !== 'undefined'; });
       }
       catch (e) {
         console.log(e);
