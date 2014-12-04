@@ -44,6 +44,8 @@
     "gulp-mocha-phantomjs": "0.5.x",
     "gulp-tap": "*",
     "gulp-util": "*",
+    "jasmine-reporters": "~1.0.0",
+    "minimist": "*",
     "mustache": "*",
     "mocha": "*",
     "through2" : "*",
