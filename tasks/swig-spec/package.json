@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
