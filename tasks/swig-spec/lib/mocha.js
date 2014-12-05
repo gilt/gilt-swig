@@ -48,7 +48,6 @@ module.exports = function (gulp, swig, options, done) {
       .pipe(gulp.dest(options.specsPath))
       .pipe(mocha({
         reporter: nyanPath,
-        silent: true,
         phantomjs: { webSecurityEnabled: false }
       }))
       .on('end', done);

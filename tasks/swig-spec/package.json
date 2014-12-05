@@ -48,6 +48,7 @@
     "minimist": "*",
     "mustache": "*",
     "mocha": "*",
+    "phantomjs": "^1.9.0",
     "through2" : "*",
     "sinon": "*",
     "underscore" : "*",

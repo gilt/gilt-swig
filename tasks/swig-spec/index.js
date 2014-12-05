@@ -28,28 +28,32 @@ module.exports = function (gulp, swig) {
       sinonApiDoc = require('./lib/sinon-apidoc.js'),
       tap = require('gulp-tap'),
 
-      defaultSpecLib = 'mocha',
+      defaultFramework = 'jasmine',
+      framework = defaultFramework,
       options = {},
       scripts = [],
       sinonPath = path.join(path.dirname(require.resolve('sinon')), '../pkg'),
       specFiles = [],
-      specLib = swig.pkg.gilt ? swig.pkg.gilt.specsLibrary || defaultSpecLib : defaultSpecLib,
       specs = [],
       servers,
       specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
       srcPath,
       impl;
 
+    if (swig.pkg.gilt && swig.pkg.gilt.specs && swig.pkg.gilt.specs.framework){
+      framework = swig.pkg.gilt.specs.framework;
+    }
+
     swig.log.task('Initializing Specs');
 
     try {
-      swig.log.info('', 'Loading ' + specLib + '...');
+      swig.log.info('', 'Loading ' + framework + '...');
 
-      impl = require('./lib/' + specLib.toLowerCase());
+      impl = require('./lib/' + framework.toLowerCase());
     }
     catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
-        swig.log.error('spec', 'Spec Library: ' + specLib + ', hasn\'t been implemented.');
+        swig.log.error('spec', 'Spec Library: ' + framework + ', hasn\'t been implemented.');
         swig.log(e);
       }
       else {

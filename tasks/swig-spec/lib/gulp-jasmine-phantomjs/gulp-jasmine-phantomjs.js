@@ -2,7 +2,7 @@
 'use strict';
 
 var fs = require('fs'),
-  path = require('fs'),
+  path = require('path'),
   url = require('url'),
   spawn = require('child_process').spawn,
   through = require('through2'),
@@ -70,7 +70,7 @@ function crossPlatform(str) {
 function spawnPhantomJS(args, options, cb) {
 
   //lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true),
-  var phantomjsPath = path.join(path.dirname(require.resolve('phantomjs')), 'bin/phantom'),
+  var phantomjsPath = path.join(path.dirname(require.resolve('phantomjs')), '../bin/phantomjs'),
     phantomjs;
 
   if (!phantomjsPath) {
