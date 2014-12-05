@@ -48,8 +48,9 @@ module.exports = function (gulp, swig, options, done) {
       .pipe(gulp.dest(options.specsPath))
       .pipe(mocha({
         reporter: nyanPath,
-        silent: true,
+        silent: false,
         phantomjs: { webSecurityEnabled: false }
       }))
+      .on('error', function() { done(new gutil.PluginError('swig-spec', 'Test failure')); })
       .on('end', done);
 };
