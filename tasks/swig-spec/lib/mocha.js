@@ -50,5 +50,6 @@ module.exports = function (gulp, swig, options, done) {
         reporter: nyanPath,
         phantomjs: { webSecurityEnabled: false }
       }))
+      .on('error', function() { done(new gutil.PluginError('swig-spec', 'Test failure')); })
       .on('end', done);
 };
