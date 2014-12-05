@@ -113,7 +113,13 @@ module.exports = function (swig) {
     lastLine = linePrefix + what;
     lastLineLength = strip(lastLine).length;
 
-    console.log(lastLine  + (trailing ? newline : ''));
+    what = lastLine  + (trailing ? newline : '');
+
+    if (swig.argv.pretty === 'false') {
+      what = strip(what);
+    }
+
+    console.log(what);
   }
 
   puts = _.extend(puts, {
