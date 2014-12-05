@@ -1,7 +1,7 @@
 {
   "name": "swig-util",
   "description": "",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -42,7 +42,8 @@
     "findup-sync" : "*",
     "gulp-util": "*",
     "run-sequence": "*",
-    "underscore": "*"
+    "underscore": "*",
+    "fs-extra": "*"
   },
   "devDependencies": {
 

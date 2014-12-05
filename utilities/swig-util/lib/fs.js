@@ -15,7 +15,7 @@
 
 module.exports = function (swig) {
 
-  var fs = require('fs'),
+  var fs = require('fs-extra'),
     path = require('path');
 
   swig.fs = {
@@ -70,7 +70,7 @@ module.exports = function (swig) {
             path.join(dest, childItemName));
         });
       } else {
-        fs.linkSync(src, dest);
+        fs.copySync(src, dest);
       }
     }
 
