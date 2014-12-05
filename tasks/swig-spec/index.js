@@ -102,7 +102,8 @@ module.exports = function (gulp, swig) {
           specsPath: specsPath,
           specFiles: specFiles,
           sinonPath: sinonPath,
-          servers: servers
+          servers: servers,
+          useColors: (swig.argv.pretty !== 'false')
         };
 
         // fire our specs implementation (jasmine, mocha, etc..)
