@@ -24,16 +24,13 @@ module.exports = function (gulp, swig, options, done) {
 
     jasminePath = path.join(__dirname, 'gulp-jasmine-phantomjs/lib/jasmine'),
 
-    reporterPath = path.dirname(require.resolve('jasmine-reporters')),
-
     runnerPath = path.join(__dirname, '../templates/jasmine-runner.html'),
     runner = fs.readFileSync(runnerPath, 'utf-8');
 
     swig.log.info('', 'Rendering Runner...\n');
 
     options = _.extend(options, {
-      jasminePath: jasminePath,
-      reporterPath: reporterPath
+      jasminePath: jasminePath
     });
 
     runner = mustache.render(runner, options);

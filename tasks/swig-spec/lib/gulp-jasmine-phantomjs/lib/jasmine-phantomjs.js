@@ -103,6 +103,8 @@
         onError: function (message, traces) {
           var file, index, line, trace;
 
+          console.log(message);
+
           if (self.page.evaluate(function () { return window.onerror != null; })) {
             return;
           }
@@ -255,13 +257,20 @@
         return true;
       }
       catch (e) {
+        var out = 'Script Error in PhantomJS\n\nMessage:\n  ' + e.message +
+          '\nStack:\n  ' + e.stack + '\n';
+
+        console.log(out);
+
         return false;
       }
     },
 
     runJasmine: function () {
 
-      if (this.page.evaluate(this.phantomRunner)) {
+      var result = this.page.evaluate(this.phantomRunner);
+
+      if (result) {
         this.startTime = new Date().getTime();
 
         return this.waitForJasmine();
