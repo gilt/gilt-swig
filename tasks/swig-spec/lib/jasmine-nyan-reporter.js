@@ -24,6 +24,10 @@
     process.stdout.write(string);
   }
 
+  function color (what, colorValue) {
+    return '\u001b[' + colorValue + 'm' + what + '\u001b[0m';
+  }
+
   var cursor,
     colors,
     isatty = true,
@@ -48,7 +52,8 @@
     'light': 90,
     'diff gutter': 90,
     'diff added': 42,
-    'diff removed': 41
+    'diff removed': 41,
+    'grey': 30
   };
 
   cursor = {
@@ -89,6 +94,11 @@
 
   function NyanReporter (options) {
 
+    window.width =
+      isatty
+        ? process.stdout.getWindowSize ? process.stdout.getWindowSize(1)[0] : 75
+        : 75;
+
     var defaults = {
         useColor: true,
         isatty: true
@@ -112,13 +122,9 @@
     this.passed = 0;
     this.pending = 0;
     this.total = 0;
+    this.startTime = 0;
 
     isatty = options.isatty;
-
-    window.width =
-      isatty
-        ? process.stdout.getWindowSize ? process.stdout.getWindowSize(1)[0] : 75
-        : 75;
   }
 
   NyanReporter.prototype = {
@@ -126,17 +132,22 @@
     reportRunnerStarting: function (runner) {
       cursor.hide();
 
+      this.startTime = (new Date()).getTime();
       this.pending = runner.specs().length;
+
       this.draw();
     },
 
     reportRunnerResults: function (runner) {
+
       this.failed = this.total - this.passed;
-      //this.epilogue();
 
       cursor.down(this.numberOfLines);
 
+      this.epilogue();
+
       cursor.show();
+
       this.finished = true;
     },
 
@@ -167,10 +178,11 @@
         this.passed++;
       }
       else {
+
         fail = {
           id: spec.id,
           desc: spec.description,
-          results: results.items.concat([]),
+          results: [].concat(results.getItems()),
           suite: {
             id: spec.suite.id,
             desc: spec.suite.description
@@ -182,6 +194,47 @@
       }
 
       this.draw();
+    },
+
+    epilogue: function () {
+      var duration = (new Date()).getTime() - this.startTime,
+        indent = '   ',
+        spec,
+        result,
+        parts;
+
+      write('\n' + indent + color(this.passed + ' passing', colors['bright pass']) + color(' (' + duration + 'ms)\n', colors.pass));
+
+      if (this.failed > 0) {
+        write(indent + color(this.failed + ' failing\n\n', colors['bright fail']));
+
+        for (var i = 0; i < this.failedSpecs.length; i++) {
+          spec = this.failedSpecs[i];
+          write(indent + color((i + 1) + ') ' + spec.suite.desc + ': ' + spec.desc + ':\n', colors['error title']));
+
+          for(var resultIndex = 0; resultIndex < spec.results.length; resultIndex++) {
+            result = spec.results[resultIndex];
+
+            if (result.trace.stack) {
+              parts = result.trace.stack.split('\n');
+
+              write(indent + indent + color(parts.shift(), colors['error message']) + '\n');
+              write(indent + color(parts.join('\n' + indent), colors['error stack']) + '\n');
+            }
+            else {
+              write(indent + indent + color(result.message, colors['error message']) + '\n');
+            }
+
+            write('\n');
+          }
+        }
+      }
+      else {
+        write('\n');
+      }
+
+      write('\n');
+
     },
 
     /**
@@ -213,7 +266,7 @@
 
       draw(colors.green, this.passed);
       draw(colors.fail, this.failed);
-      draw(colors.pending, this.pending);
+      draw(colors.pending, this.pending + ' ');
       write('\n');
 
       cursor.up(this.numberOfLines);

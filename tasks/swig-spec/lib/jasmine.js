@@ -21,6 +21,7 @@ module.exports = function (gulp, swig, options, done) {
     path = require('path'),
     jasmine = require('./gulp-jasmine-phantomjs/gulp-jasmine-phantomjs.js'),
     mustache = require('mustache'),
+    gutil = require('gulp-util'),
 
     jasminePath = path.join(__dirname, 'gulp-jasmine-phantomjs/lib/jasmine'),
 
@@ -43,5 +44,6 @@ module.exports = function (gulp, swig, options, done) {
       .pipe(jasmine({
         phantomjs: { webSecurityEnabled: false }
       }))
+      .on('error', done)
       .on('end', done);
 };

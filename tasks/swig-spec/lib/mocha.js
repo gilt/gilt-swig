@@ -21,6 +21,7 @@ module.exports = function (gulp, swig, options, done) {
     path = require('path'),
     mocha = require('gulp-mocha-phantomjs'),
     mustache = require('mustache'),
+    gutil = require('gulp-util'),
 
     mochaPath = path.dirname(require.resolve('mocha')),
 
