@@ -42,7 +42,7 @@ module.exports = function (gulp, swig, options, done) {
 
     runner = mustache.render(runner, options);
 
-    swig.log.task('Running PhantomJS+Mocha');
+    swig.log.task('Running Specs with PhantomJS+Mocha');
     swig.log('');
 
     file('runner.html', runner, { src: true })

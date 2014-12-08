@@ -36,7 +36,7 @@ module.exports = function (gulp, swig, options, done) {
 
     runner = mustache.render(runner, options);
 
-    swig.log.task('Running PhantomJS+Jasmine');
+    swig.log.task('Running Specs with PhantomJS+Jasmine');
     swig.log('');
 
     file('runner.html', runner, { src: true })

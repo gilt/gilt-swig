@@ -259,6 +259,8 @@
     drawScoreboard: function () {
 
       function draw(color, n) {
+        n = Math.max(parseInt(n), 0);
+
         write(' ');
         write('\u001b[' + color + 'm' + n + '\u001b[0m');
         write('\n');
