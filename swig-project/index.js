@@ -110,9 +110,6 @@ module.exports = function (gulp) {
       path: target,
       name: path.basename(target)
     };
-
-    console.log('·  ' + 'target:      '.blue + swig.target.name.grey);
-    console.log('·  ' + 'target-path: '.blue + swig.target.path.grey + '\n');
   }
 
   function findPackage () {
@@ -134,6 +131,9 @@ module.exports = function (gulp) {
   findTarget();
   findPackage();
   findSwigRc();
+
+  console.log('·  ' + 'target:      '.blue + (swig.argv.module || swig.pkg.name).grey);
+  console.log('·  ' + 'target-path: '.blue + swig.target.path.grey + '\n');
 
   // create swigs's temporary directory;
   if (!fs.existsSync(swig.temp)) {
