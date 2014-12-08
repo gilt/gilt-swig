@@ -25,7 +25,7 @@ module.exports = function (gulp, swig, options, done) {
 
     jasminePath = path.join(__dirname, 'gulp-jasmine-phantomjs/lib/jasmine'),
 
-    runnerPath = path.join(__dirname, '../templates/jasmine-runner.html'),
+    runnerPath = path.join(__dirname, '../templates/jasmine-runner.mustache'),
     runner = fs.readFileSync(runnerPath, 'utf-8');
 
     swig.log.info('', 'Rendering Runner...\n');

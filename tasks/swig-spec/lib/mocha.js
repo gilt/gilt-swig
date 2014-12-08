@@ -30,7 +30,7 @@ module.exports = function (gulp, swig, options, done) {
     nyanPath = path.join(mochaPath, '/lib/reporters/nyan.js'),
 
     chaiPath = path.dirname(require.resolve('chai')),
-    runnerPath = path.join(__dirname, '../templates/mocha-runner.html'),
+    runnerPath = path.join(__dirname, '../templates/mocha-runner.mustache'),
     runner = fs.readFileSync(runnerPath, 'utf-8');
 
     swig.log.info('', 'Rendering Runner...\n');
