@@ -37,7 +37,7 @@ module.exports = function (gulp, swig) {
       specs = [],
       servers,
       specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
-      srcPath,
+      srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name),
       impl;
 
     if (swig.pkg.gilt && swig.pkg.gilt.specs && swig.pkg.gilt.specs.framework){
@@ -61,11 +61,10 @@ module.exports = function (gulp, swig) {
       }
     }
 
-    if (swig.project.type === 'webapp') {
-      srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name);
-    }
-    else {
-      srcPath = path.join(swig.target.path, 'public/js/');
+    // if we're in a ui-* modules repo
+    if (swig.project.type !== 'webapp') {
+      srcPath = path.join(swig.target.path, 'js/');
+      specsPath = path.join(swig.target.path, 'spec/');
     }
 
     swig.log.info('', 'Enumerating Dependencies...');
