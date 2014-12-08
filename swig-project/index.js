@@ -32,7 +32,7 @@ module.exports = function (gulp) {
 
   require('colors');
   console.log('·  ' + 'swig-project'.red + ' v' + thisPkg.version + '\n·');
-  console.log('·  ' + 'gulpfile: '.blue + module.parent.id.replace(process.env.HOME, '~').grey + '\n');
+  console.log('·  ' + 'gulpfile:    '.blue + module.parent.id.replace(process.env.HOME, '~').grey);
 
   function load (moduleName) {
 
@@ -110,6 +110,9 @@ module.exports = function (gulp) {
       path: target,
       name: path.basename(target)
     };
+
+    console.log('·  ' + 'target:      '.blue + swig.target.name.grey);
+    console.log('·  ' + 'target-path: '.blue + swig.target.path.grey + '\n');
   }
 
   function findPackage () {
