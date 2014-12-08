@@ -41,8 +41,11 @@ module.exports = function (gulp, swig) {
     else if (glob.sync(path.join(swig.cwd, '/lib/**/*.jar')).length) {
       jvm();
     }
+    else if (swig.argv.module) {
+      util.generate(swig.pkg.dependencies);
+    }
     else {
-      swig.log('Package Merge: app type not found.');
+      swig.log.warn('package-merge', 'Package Merge: app type not found.');
     }
   };
 };

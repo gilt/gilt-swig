@@ -68,6 +68,11 @@ module.exports = function (gulp, swig) {
   }
 
   function * local() {
+    if (swig.argv.module) {
+      swig.log.info('', 'Skipping Local Node Modules');
+      return;
+    }
+
     var pkg = swig.pkg;
 
     swig.log.task('Installing Local Node Modules');
@@ -96,7 +101,7 @@ module.exports = function (gulp, swig) {
 
     swig.log.task('Installing Gilt UI Dependencies');
 
-    if (!pkg.gilt || !pkg.gilt.uiDependencies) {
+    if (!swig.argv.module && (!pkg.gilt || !pkg.gilt.uiDependencies)) {
       swig.log.warn(null, 'package.json doesn\'t contain any uiDependencies, nothing to install.\n');
       return;
     }
@@ -138,7 +143,6 @@ module.exports = function (gulp, swig) {
     mergeModules();
     processPublic();
 
-    swig.log();
     swig.log.success('Install Complete');
 
   }));

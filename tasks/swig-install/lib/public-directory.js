@@ -27,7 +27,7 @@ module.exports = function (gulp, swig) {
 
   // remove everything in /public except for /public/src and /public/main.less
   function clean () {
-    swig.log.task('Cleaning the /public directory...');
+    swig.log.info('', 'Cleaning the /public directory...');
 
     var paths = [
         './public/**/{target}/**/*',
@@ -49,14 +49,12 @@ module.exports = function (gulp, swig) {
       swig.log.verbose('[clean] removing: ' + file);
       rimraf.sync(path.normalize(file));
     });
-
-    swig.log.success(null, 'Done\n');
   }
 
   // find and compile a list of all unique modules, and their paths
   function compile () {
 
-    swig.log.task('Compiling module list...');
+    swig.log.info('', 'Compiling module list...');
 
     var modulesPath = path.join(swig.temp, '/**/node_modules'),
       modPaths = glob.sync(modulesPath),
@@ -86,17 +84,26 @@ module.exports = function (gulp, swig) {
 
     swig.log.verbose('[compile] sorted modules: ');
     swig.log.verbose(modules);
-    swig.log.success(null, 'Done\n');
   }
 
   function copy (paths) {
 
-    swig.log.task('Copying modules to /public...');
-    swig.log.verbose('');
-
     var destPath,
       sourcePath,
       modPathName;
+
+    if (swig.argv.module) {
+      swig.log.info('', 'Copying ' + swig.argv.module + ' to temp...');
+
+      destPath = path.join(swig.temp, 'node_modules', swig.argv.module);
+      sourcePath = path.join(swig.target.path);
+
+      swig.fs.copyAll(sourcePath, destPath);
+      modules[swig.argv.module] = destPath;
+    }
+
+    swig.log.info('', 'Copying modules to /public...');
+    swig.log.verbose('');
 
     _.each(modules, function (modPath, name) {
       modPathName = name.replace(/\./g, '/');
@@ -108,14 +115,17 @@ module.exports = function (gulp, swig) {
 
         if (fs.existsSync(sourcePath)) {
           destPath = path.join(p, modPathName);
+
+          if (fs.existsSync(destPath)) {
+            rimraf.sync(destPath);
+          }
+
           swig.fs.mkdir(destPath);
           swig.fs.copyAll(sourcePath, destPath);
           swig.log.verbose('[copy] copied: ' + destPath);
         }
       })
     });
-
-    swig.log.success(null, 'Done\n');
   }
 
   function manifest (paths) {
@@ -129,15 +139,15 @@ module.exports = function (gulp, swig) {
       modules[name] = pkg.version;
     });
 
-    swig.log.task('Writing manifest.json to');
-    swig.log(swig.log.padLeft(' manifest.json: ' + manifestPath.grey + '\n', 1));
+    swig.log.info('', 'Writing manifest.json to:');
+    swig.log(swig.log.padLeft(manifestPath.grey, 2));
 
     fs.writeFileSync(manifestPath, JSON.stringify({ generated: now, dependencies: modules }, null, 2));
   }
 
   function replace (paths) {
 
-    swig.log.task('Replacing Public Repo Name in CSS');
+    swig.log.info('', 'Replacing Public Repo Name in CSS...');
 
     glob.sync(path.join(paths.css, '/**/*.css')).forEach(function (file) {
       var content = fs.readFileSync(file, { encoding: 'utf-8' }),
@@ -146,17 +156,15 @@ module.exports = function (gulp, swig) {
       if (matches && matches.length) {
         content = content.replace(/\$\$PUBLIC\_REPO\_NAME\$\$/g, swig.pkg.name);
         fs.writeFileSync(file, content);
-        swig.log.success(null, ' ' + file.grey);
+        swig.log(swig.log.padLeft(file.grey, 2));
       }
     });
-
-    swig.log.success(null, 'Done\n');
   }
 
   function vendor (paths) {
     var destPath;
 
-    swig.log.task('Copying internal modules to vendor/common');
+    swig.log.info('', 'Copying internal modules to vendor/common...');
 
     glob.sync(path.join(paths.js, '/internal/**/*.js')).forEach(function (file) {
       destPath = path.join(paths.js, '/vendor/common/', path.basename(file));
@@ -165,11 +173,14 @@ module.exports = function (gulp, swig) {
         swig.fs.mkdir(path.dirname(destPath));
       }
 
+      if (fs.existsSync(destPath)) {
+        fs.unlinkSync(destPath);
+      }
+
       fs.linkSync(file, destPath);
     });
 
-    swig.log.success(null, 'Done\n');
-    swig.log.task('Copying less helpers common/helpers');
+    swig.log.info('', 'Copying less helpers common/helpers...');
 
     glob.sync(path.join(paths.css, '/less/helpers/*.less')).forEach(function (file) {
       destPath = path.join(paths.css, '/common/helpers/', path.basename(file));
@@ -178,10 +189,12 @@ module.exports = function (gulp, swig) {
         swig.fs.mkdir(path.dirname(destPath));
       }
 
+      if (fs.existsSync(destPath)) {
+        fs.unlinkSync(destPath);
+      }
+
       fs.linkSync(file, destPath);
     });
-
-    swig.log.success(null, 'Done\n');
   }
 
   return function process () {
@@ -193,6 +206,12 @@ module.exports = function (gulp, swig) {
       paths = { pub: path.join(swig.target.path, '/public') },
       less = require('./less'),
       mainJs = require('./main-js');
+
+    // we may have tasks for ui-* repos which need an install.
+    // so let's install, but keep everything in a temp directory
+    if (swig.argv.module) {
+      paths.pub = path.join(swig.temp, 'install', swig.argv.module, 'public');
+    }
 
     if (pkg.name) {
       paths = {
@@ -206,6 +225,8 @@ module.exports = function (gulp, swig) {
       swig.log.error('install:public-directory', 'package.json is missing the "name" property.');
       return;
     }
+
+    swig.log.task('Processing node_modules → /public')
 
     clean();
     compile();
