@@ -2,13 +2,8 @@
   "name": "web-thing",
   "description": "",
   "version": "0.0.1",
-  "homepage": "https://github.com/gilt/gilt-swig",
-  "keywords": [
-    "gulp",
-    "swig",
-    "package",
-    "mangement"
-  ],
+  "homepage": "",
+  "keywords": [],
   "repository": {
     "type": "git",
     "url": ""
