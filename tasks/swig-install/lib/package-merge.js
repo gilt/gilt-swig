@@ -25,7 +25,8 @@
 module.exports = function (gulp, swig) {
 
   return function packageMerge () {
-    var fs = require('fs'),
+    var _ = require('underscore'),
+      fs = require('fs'),
       path = require('path'),
       glob = require('glob'),
       util = require('./merge-util')(gulp, swig),
@@ -42,7 +43,15 @@ module.exports = function (gulp, swig) {
       jvm();
     }
     else if (swig.argv.module) {
-      util.generate(swig.pkg.dependencies);
+      var pkg = swig.pkg.dependencies;
+
+      // if a task is requesting install and needs devDependencies to be available
+      // it can use the --devDependencies flag or set it manually on swig.argv.
+      if (swig.argv.devDependencies) {
+        pkg = _.extend(pkg, swig.pkg.devDependencies || {});
+      }
+
+      util.generate(pkg);
     }
     else {
       swig.log.warn('package-merge', 'Package Merge: app type not found.');

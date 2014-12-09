@@ -123,6 +123,12 @@ module.exports = function (gulp, swig) {
     generate: function (deps, key) {
       swig.log.task('Writing merged package.json');
 
+      // if a task is requesting install and needs devDependencies to be available
+      // it can use the --devDependencies flag or set it manually on swig.argv.
+      if (swig.argv.devDependencies) {
+        deps = _.extend(deps, swig.pkg.devDependencies || {});
+      }
+
       var packageTempPath = path.join(swig.temp, (key ? key + '-' : '') + 'package.json'),
         pkg = { dependencies: deps },
         internalModules = {
