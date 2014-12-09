@@ -43,7 +43,11 @@ module.exports = function (gulp, swig, options, done) {
     file('runner.html', runner, { src: true })
       .pipe(gulp.dest(options.specsPath))
       .pipe(jasmine({
-        phantomjs: { webSecurityEnabled: false }
+        phantomjs: {
+          webSecurityEnabled: false,
+          localToRemoteUrlAccessEnabled: true,
+          ignoreSslErrors: true
+        }
       }))
       .on('error', done)
       .on('end', done);

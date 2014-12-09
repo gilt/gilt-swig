@@ -22,6 +22,8 @@
 
     <script>
 
+      targetExperience = '{{targetExperience}}';
+
       {{#servers}}
       gilt.endpoints.add({
         method: '{{method}}',
@@ -37,6 +39,8 @@
 
       gilt.specs.start({
         baseUrl: '{{{baseUrl}}}',
+        config: {{{config}}},
+        targetExperience: '{{targetExperience}}',
         callback: function () {
           if (window.__runner) {
 

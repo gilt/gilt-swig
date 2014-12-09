@@ -21,6 +21,8 @@
 
     <script>
 
+      targetExperience = '{{targetExperience}}';
+
       var expect = chai.expect,
         assert = chai.assert;
 
@@ -48,6 +50,8 @@
 
       gilt.specs.start({
         baseUrl: '{{{baseUrl}}}',
+        config: {{{config}}},
+        targetExperience: '{{targetExperience}}',
         callback: function () {
           if (window.mochaPhantomJS) {
             mochaPhantomJS.run();

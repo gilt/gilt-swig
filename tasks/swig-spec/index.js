@@ -48,6 +48,9 @@ module.exports = function (gulp, swig) {
     swig.log.success(null, 'Done\n');
   }
 
+  // tell `install` that we need devDependencies too.
+  swig.argv.devDependencies = true;
+
   gulp.task('spec', [swig.argv.module ? 'install' : 'install-noop'], function (done) {
 
     var _ = require('underscore'),
@@ -132,13 +135,15 @@ module.exports = function (gulp, swig) {
       .on('end', function () {
         options = {
           baseUrl: srcPath,
+          config: JSON.stringify(swig.pkg.configDependencies || {}, null, 2),
           scripts: scripts,
           specs: specs.join(','),
           specsPath: specsPath,
           specFiles: specFiles,
           sinonPath: sinonPath,
           servers: servers,
-          useColors: (swig.argv.pretty !== 'false')
+          useColors: (swig.argv.pretty !== 'false'),
+          targetExperience: swig.argv.targetExperience || 'full'
         };
 
         // fire our specs implementation (jasmine, mocha, etc..)

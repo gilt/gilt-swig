@@ -71,6 +71,7 @@ function spawnPhantomJS(args, options, cb) {
 
   //lookup('.bin/phantomjs', true) || lookup('phantomjs/bin/phantomjs', true),
   var phantomjsPath = path.join(path.dirname(require.resolve('phantomjs')), '../bin/phantomjs'),
+    errors = [],
     phantomjs;
 
   if (!phantomjsPath) {
@@ -80,13 +81,22 @@ function spawnPhantomJS(args, options, cb) {
   phantomjs = spawn(phantomjsPath, args);
 
   phantomjs.stdout.pipe(process.stdout);
-  phantomjs.stderr.pipe(process.stderr);
+  // phantomjs.stderr.pipe(process.stderr);
+  phantomjs.stderr.on('data', function (data) {
+    errors.push(data);
+  });
 
   phantomjs.on('error', function (err) {
     cb(new gutil.PluginError(pluginName, err.message));
   });
 
   phantomjs.on('exit', function (code) {
+    if (errors.length) {
+      for(var i = 0; i < errors.length; i++){
+        console.log('[phantom] ' + errors[i]);
+      }
+    }
+
     if (code === 0 || options.silent) {
       cb();
     } else {

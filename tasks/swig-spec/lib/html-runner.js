@@ -5,6 +5,8 @@
     specFiles = [],
     sinonEndpoints = [];
 
+  window.targetExperience = 'full';
+
   window.requireModules = function () {
     throw new Error('requireModules is now obsolete.\n\
       If the file begins with requireModules, please update it to use `gilt.define`.\n\
@@ -64,6 +66,19 @@
     start: function (options) {
 
       gilt.endpoints._server = gilt.endpoints.init(undefined, sinonEndpoints);
+
+      // define any configs within package.json : configDependencies
+      if (options.config) {
+        for (var key in options.config) {
+          if (Object.prototype.hasOwnProperty.call(options.config, key)) {
+            gilt.define(key, function () { return options.config[key] });
+          }
+        }
+      }
+
+      if (options.targetExperience) {
+        window.targetExperience = options.targetExperience;
+      }
 
       requirejs.config({
         baseUrl: options.baseUrl,

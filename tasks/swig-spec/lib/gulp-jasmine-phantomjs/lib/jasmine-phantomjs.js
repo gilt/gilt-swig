@@ -49,12 +49,22 @@
 
   JasmineRunner.prototype = {
 
-    fail: function (message, errorNumber) {
+    fail: function (message, errorNumber, stack) {
       if (message) {
-        system.stderr.writeLine(message);
+        system.stderr.write(message + '\n' + stack + '\n');
       }
 
-      return phantom.exit(errorNumber || 1);
+      // var ignorePatterns = [
+      //   /SyntaxError: Parse error/
+      // ];
+
+      // for (var i = 0; i < ignorePatterns.lenght; i++){
+      //   if (ignorePatterns.test(message)) {
+      //     return;
+      //   }
+      // }
+
+      // return phantom.exit(errorNumber || 1);
     },
 
     finish: function () {
@@ -97,15 +107,14 @@
       this.page = extend(this.page, {
 
         onConsoleMessage: function (message) {
-          return system.stdout.writeLine(message);
+          return system.stdout.writeLine('[console] ' + message);
         },
 
         onError: function (message, traces) {
           var file, index, line, trace;
 
-          console.log(message);
-
           if (self.page.evaluate(function () { return window.onerror != null; })) {
+            console.log('window.onerror');
             return;
           }
 
@@ -116,7 +125,7 @@
             traces[index] = '  ' + file + ':' + line;
           }
 
-          return self.fail('' + message + '\n\n' + (traces.join('\n')));
+          return self.fail(message, 0, traces.join('\n'));
         },
 
         onInitialized: function () {
