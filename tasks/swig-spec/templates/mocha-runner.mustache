@@ -14,7 +14,16 @@
     <script src="{{{mochaPath}}}/mocha.js"></script>
     <script src="{{{chaiPath}}}/chai.js"></script>
 
+  {{#scripts}}
+    <script src="{{{.}}}"></script>
+  {{/scripts}}
+    <script src="{{{libPath}}}/html-runner.js"></script>
+
     <script>
+
+      var expect = chai.expect,
+        assert = chai.assert;
+
       mocha.setup({
         ui: 'bdd',
         ignoreLeaks: true,
@@ -24,53 +33,32 @@
       // allows mocha to continue to run tests after the first failure.
       mocha.bail(false);
 
-      function initMockServer (server) {
-        if (typeof server === 'undefined') {
-          server = sinon.fakeServer.create();
-        }
-        {{#servers}}
-        server.respondWith('{{method}}', new RegExp('{{{path}}}'), [
-          {{responseCode}},
-          { 'Content-Type': 'application/json' },
-          '{{{responseData}}}'
-        ]);
-        {{/servers}}
-        return server;
-      }
+      {{#servers}}
+      gilt.endpoints.add({
+        method: '{{method}}',
+        path: '{{{path}}}',
+        code: {{responseCode}},
+        data: '{{{responseData}}}'
+      });
+      {{/servers}}
 
-      var expect = chai.expect,
-        assert = chai.assert,
-        specs = [{{{specs}}}],
-        require = {
-          baseUrl: '{{{baseUrl}}}',
-          callback: function () {
+      {{#specFiles}}
+      gilt.specs.addFile('{{{.}}}');
+      {{/specFiles}}
 
-            // we're going to wire up some fake defines here. these will be ignored if they've already been defined.
-            // this allows us to include js files from the /spec dir which contain no defines, seamlessly.
-            specs.forEach(function (name) {
-              define(name, function () {});
-            });
-
-            require(specs, function () {
-
-              if (window.mochaPhantomJS) {
-                mochaPhantomJS.run();
-              }
-              else {
-                mocha.run();
-              }
-            });
+      gilt.specs.start({
+        baseUrl: '{{{baseUrl}}}',
+        callback: function () {
+          if (window.mochaPhantomJS) {
+            mochaPhantomJS.run();
           }
-        };
+          else {
+            mocha.run();
+          }
+        }
+      });
+
     </script>
-
-  {{#scripts}}
-    <script src="{{{.}}}"></script>
-  {{/scripts}}
-
-  {{#specFiles}}
-    <script src="{{{.}}}"></script>
-  {{/specFiles}}
 
   </body>
 </html>

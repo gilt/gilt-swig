@@ -31,7 +31,8 @@ module.exports = function (gulp, swig, options, done) {
     swig.log.info('', 'Rendering Runner...\n');
 
     options = _.extend(options, {
-      jasminePath: jasminePath
+      jasminePath: jasminePath,
+      libPath: __dirname
     });
 
     runner = mustache.render(runner, options);

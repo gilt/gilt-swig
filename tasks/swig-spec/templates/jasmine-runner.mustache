@@ -13,75 +13,53 @@
     <script src="{{{sinonPath}}}/sinon.js"></script>
     <script src="{{{jasminePath}}}/jasmine-1.3.1.js"></script>
     <script src="{{{jasminePath}}}/jasmine-html-1.3.1.js"></script>
-    <script src="{{{jasminePath}}}/../../../jasmine-nyan-reporter.js"></script>
-
-    <script>
-
-      function initMockServer (server) {
-        if (typeof server === 'undefined') {
-          server = sinon.fakeServer.create();
-        }
-        {{#servers}}
-        server.respondWith('{{method}}', new RegExp('{{{path}}}'), [
-          {{responseCode}},
-          { 'Content-Type': 'application/json' },
-          '{{{responseData}}}'
-        ]);
-        {{/servers}}
-        return server;
-      }
-
-      var specs = [{{{specs}}}],
-        require = {
-          baseUrl: '{{{baseUrl}}}',
-          callback: function () {
-
-            // we're going to wire up some fake defines here. these will be ignored if they've already been defined.
-            // this allows us to include js files from the /spec dir which contain no defines, seamlessly.
-            specs.forEach(function (name) {
-              define(name, function () {});
-            });
-
-            require(specs, function () {
-
-              if (window.__runner) {
-
-                window.__runner.run({
-                  reporters: [
-                    new jasmine.NyanReporter({
-                      verbosity: 3,
-                      color: {{useColors}}
-                    })
-                  ]
-                });
-              }
-              else {
-                var env = jasmine.getEnv();
-
-                env.updateInterval = 1000;
-                env.addReporter(new jasmine.HtmlReporter());
-                env.execute();
-              }
-
-            });
-          }
-        };
-
-    </script>
+    <script src="{{{libPath}}}/jasmine-nyan-reporter.js"></script>
 
   {{#scripts}}
     <script src="{{{.}}}"></script>
   {{/scripts}}
+    <script src="{{{libPath}}}/html-runner.js"></script>
 
-  <script>
-    // internal.gilt_require has deprecated `requireSpecs`
-    requireSpecs = gilt.require;
-  </script>
+    <script>
 
-  {{#specFiles}}
-    <script src="{{{.}}}"></script>
-  {{/specFiles}}
+      {{#servers}}
+      gilt.endpoints.add({
+        method: '{{method}}',
+        path: '{{{path}}}',
+        code: {{responseCode}},
+        data: '{{{responseData}}}'
+      });
+      {{/servers}}
 
+      {{#specFiles}}
+      gilt.specs.addFile('{{{.}}}');
+      {{/specFiles}}
+
+      gilt.specs.start({
+        baseUrl: '{{{baseUrl}}}',
+        callback: function () {
+          if (window.__runner) {
+
+            window.__runner.run({
+              reporters: [
+                new jasmine.NyanReporter({
+                  verbosity: 3,
+                  color: {{useColors}}
+                })
+              ]
+            });
+          }
+          else {
+            var env = jasmine.getEnv();
+
+            env.updateInterval = 1000;
+            env.addReporter(new jasmine.HtmlReporter());
+            env.execute();
+          }
+        }
+      });
+
+    </script>
 
   </body>
 </html>

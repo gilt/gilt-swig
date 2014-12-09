@@ -37,7 +37,8 @@ module.exports = function (gulp, swig, options, done) {
 
     options = _.extend(options, {
       mochaPath: mochaPath,
-      chaiPath: chaiPath
+      chaiPath: chaiPath,
+      libPath: __dirname
     });
 
     runner = mustache.render(runner, options);

@@ -96,8 +96,8 @@
 
     window.width =
       isatty
-        ? process.stdout.getWindowSize ? process.stdout.getWindowSize(1)[0] : 75
-        : 75;
+        ? process.stdout.getWindowSize ? process.stdout.getWindowSize(1)[0] : 775
+        : 775;
 
     var defaults = {
         useColor: true,

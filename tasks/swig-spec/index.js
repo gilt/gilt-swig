@@ -19,7 +19,36 @@ module.exports = function (gulp, swig) {
     return;
   }
 
-  gulp.task('spec', function (done) {
+  function copyModules (paths, tempPath) {
+
+    swig.log.info('', 'Copying modules to /public...');
+    swig.log.verbose('');
+
+    var destPath,
+      sourcePath,
+      modPathName;
+
+    _.each(modules, function (modPath, name) {
+      modPathName = name.replace(/\./g, '/');
+
+      _.each(paths, function (p, pathName) {
+        sourcePath = path.join(modPath, pathName);
+
+        swig.log.verbose('\n[copy] copying: ' + sourcePath);
+
+        if (fs.existsSync(sourcePath)) {
+          destPath = path.join(p, modPathName);
+          swig.fs.mkdir(destPath);
+          swig.fs.copyAll(sourcePath, destPath);
+          swig.log.verbose('[copy] copied: ' + destPath);
+        }
+      })
+    });
+
+    swig.log.success(null, 'Done\n');
+  }
+
+  gulp.task('spec', [swig.argv.module ? 'install' : 'install-noop'], function (done) {
 
     var _ = require('underscore'),
       fs = require('fs'),
@@ -30,6 +59,7 @@ module.exports = function (gulp, swig) {
 
       defaultFramework = 'jasmine',
       framework = defaultFramework,
+      impl,
       options = {},
       scripts = [],
       sinonPath = path.join(path.dirname(require.resolve('sinon')), '../pkg'),
@@ -38,7 +68,7 @@ module.exports = function (gulp, swig) {
       servers,
       specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
       srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name),
-      impl;
+      tempPath;
 
     if (swig.pkg.gilt && swig.pkg.gilt.specs && swig.pkg.gilt.specs.framework){
       framework = swig.pkg.gilt.specs.framework;
@@ -63,7 +93,9 @@ module.exports = function (gulp, swig) {
 
     // if we're in a ui-* modules repo
     if (swig.project.type !== 'webapp') {
-      srcPath = path.join(swig.target.path, 'js/');
+      tempPath = path.join(swig.temp, 'install', swig.pkg.name)
+
+      srcPath = path.join(tempPath, 'public/js/', swig.pkg.name);
       specsPath = path.join(swig.target.path, 'spec/');
     }
 
