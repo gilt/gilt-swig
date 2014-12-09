@@ -35,7 +35,8 @@ module.exports = function (gulp, swig) {
         '!./public/**/{target}/**/config/**/*',
         '!./public/**/{target}/**/src',
         '!./public/**/{target}/**/src/**/*',
-        '!./public/css/{target}/main.less'
+        '!./public/css/{target}/main.less',
+        '!./public/spec/{target}/**/*'
       ],
       files;
 

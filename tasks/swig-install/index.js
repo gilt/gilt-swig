@@ -126,7 +126,12 @@ module.exports = function (gulp, swig) {
     swig.log();
   }
 
-  gulp.task('install', co(function *() {
+  // this is a plain old noop task for conditionally executing install.
+  gulp.task('install-noop', function (done) {
+    done();
+  });
+
+  gulp.task('install', co(function * () {
 
     if (!swig.pkg) {
       swig.log.error('install', 'Couldn\'t find package.json, not installing anything.');
@@ -143,7 +148,6 @@ module.exports = function (gulp, swig) {
     mergeModules();
     processPublic();
 
-    swig.log.success('Install Complete');
-
+    swig.log.success('Install Complete\n');
   }));
 };
