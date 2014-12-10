@@ -20,7 +20,8 @@ module.exports = function (gulp, swig) {
     fs = require('fs'),
     co = require('co'),
     gutil = require('gulp-util'),
-    prettyjson = require('prettyjson');;
+    prettyjson = require('prettyjson'),
+    stubs = require('./lib/stubs');
 
   gulp.task('stub', co(function * () {
 
@@ -92,9 +93,18 @@ module.exports = function (gulp, swig) {
     swig.log();
     response = yield swig.log.confirm(swig.log.padLeft(prompts.continue, 1));
 
-    if (response) {
-      swig.log('THUMBS UP BRO')
+    if (!response) {
+      swig.log();
+      swig.log.error('swig-stub', 'Allllllrighty then, thanks for playing.');
+      return;
     }
 
+    return gulp
+            .src(path.join(__dirname, 'templates', data.type, '/**/*'))
+            .pipe(stubs(swig))
+            .pipe(gulp.dest(path.join(swig.target.path, 'web-' + data.name)));
+            .on('exit', function exit () {
+              // ask about installing swig, npm
+            });
   }));
 };

@@ -46,6 +46,7 @@
     "co": "3.x.x",
     "gulp-util": "*",
     "prettyjson": "*",
+    "through2" : "*",
     "underscore" : "*"
   },
   "devDependencies": {
