@@ -1,0 +1,55 @@
+
+# meta files
+.DS_Store
+.allow-devtools-edit
+.history
+.idea
+.idea_modules
+.jshintrc
+
+# logs
+logs
+log
+
+# newrelic
+newrelic_agent.log
+
+# gulp
+gulpfile.js
+
+# npm
+node_modules
+npm-debug.log
+
+# misc
+json/i18n.json
+json/i18n-en_US.json
+json/registry.json
+
+# public/css/web-app/
+public/css/*/*/*
+public/css/*/*.less
+public/css/*/*.css
+!public/css/*/src/*
+
+# public/img/web-app/
+public/img/*/*/*
+!public/img/*/src/*
+
+# public/js/web-app/
+public/js/*/*/*
+public/js/*/*.js
+public/js/*/*.json
+!public/js/*/src/*
+
+# public/spec/web-app/
+public/spec/*/runner.html
+
+# public/templates/web-app/
+public/templates/*/*/*
+!public/templates/*/src/*
+
+# node project
+lib/views/partials/dom.chassis
+lib/views/partials/nav.footer
+lib/views/partials/nav.unified

@@ -44,6 +44,8 @@
   },
   "dependencies": {
     "co": "3.x.x",
+    "gulp-util": "*",
+    "prettyjson": "*",
     "underscore" : "*"
   },
   "devDependencies": {
