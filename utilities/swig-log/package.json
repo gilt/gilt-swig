@@ -2,7 +2,7 @@
   "name": "swig-log",
   "description": "Provides logging mechanisms to swig modules.",
   "readme": "README.md",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",

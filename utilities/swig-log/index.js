@@ -182,24 +182,28 @@ module.exports = function (swig) {
       return sprintf('%s%' + (howMany * linePrefix.length) + 's', what, '');
     },
 
-    confirm: thunkify(function (question, callback) {
+    prompt: thunkify(function prompt (prompt, callback) {
       var iface = readline.createInterface({
           input: process.stdin,
           output: process.stdout
         }),
         result;
 
-      iface.question(question + ' ', function (answer) {
+      iface.question(prompt + ' ', function (answer) {
         iface.close();
-
-        answer = answer || 'n';
-        answer = answer.toLowerCase();
-
-        result = answer.substring(0, 1) === 'y';
-
-        callback(null, result);
+        callback(null, answer);
       });
-    })
+    }),
+
+    confirm: function* confirm (question) {
+      var answer = yield swig.log.prompt(question) || 'n',
+        result;
+
+      answer = answer.toLowerCase();
+      result = answer.substring(0, 1) === 'y';
+
+      return result;
+    }
 
   });
 
