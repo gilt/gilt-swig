@@ -29,6 +29,7 @@ module.exports = function (gulp, swig) {
       fs = require('fs'),
       path = require('path'),
       glob = require('glob'),
+      gutil = require('gulp-util'),
       util = require('./merge-util')(gulp, swig),
       node = require('./merge-node')(gulp, swig, util),
       jvm = require('./merge-jvm')(gulp, swig, util),
@@ -54,7 +55,11 @@ module.exports = function (gulp, swig) {
       util.generate(pkg);
     }
     else {
-      swig.log.warn('package-merge', 'Package Merge: app type not found.');
+      throw new gutil.PluginError('package-merge',
+      "Couldn't determine what type of thing we\'re working on.\n\
+      If it's a Node app, it should have an 'app.js' file in the root.\n\
+      If it's a Play/Scala app, it should have JARs in /lib.\n\
+      Swig only supports Node and JVM apps, and ui-* module repos.");
     }
   };
 };
