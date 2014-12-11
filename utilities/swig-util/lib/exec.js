@@ -54,7 +54,7 @@ module.exports = function (swig) {
 
   // return a thunk for yield/generator functionality
   swig.exec = function swigExec (cmd, opts, options) {
-    opts = _.extend(opts || {}, { maxBuffer: 1024 * 500 * 2 }); // increase max buffer to 1mb
+    opts = _.extend(opts || {}, { maxBuffer: 20 * 1024 * 1024 }); // increase max buffer to 20mb
 
     return function swigExecThunk (done){
       var process = exec(cmd, opts, function execCb (err, stdout, stderr){
