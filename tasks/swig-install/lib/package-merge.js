@@ -44,6 +44,8 @@ module.exports = function (gulp, swig) {
       jvm();
     }
     else if (swig.argv.module) {
+      swig.log.task('Merging UI-* Module Package Dependencies');
+
       var pkg = swig.pkg.dependencies;
 
       // if a task is requesting install and needs devDependencies to be available

@@ -17,25 +17,31 @@
 module.exports = function (gulp, swig, util) {
 
   return function node () {
-    var path = require('path'),
-      deps,
+    var _ = require('underscore'),
+      path = require('path'),
+      uiDeps,
       pkg;
 
     swig.log.task('Merging Node App Package(s)');
 
-    pkg = swig.pkg;
-
     swig.log.success(null, 'Done\n');
     swig.log.task('Extracting dependencies');
 
-    deps = util.extract(pkg, {}, path.basename(swig.cwd));
+    pkg = _.extend({}, swig.pkg);
+
+    // we don't want dependencies mixed with uiDeps in node apps
+    if (swig.project.type !== 'module' && pkg.dependencies) {
+      delete pkg.dependencies;
+    }
+
+    uiDeps = util.extract(pkg, {}, path.basename(swig.cwd));
 
     swig.log.success(null, 'Done\n');
 
-    deps = util.iterate(deps);
+    uiDeps = util.iterate(uiDeps);
 
-    if (deps) {
-      util.generate(deps);
+    if (uiDeps) {
+      util.generate(uiDeps);
     }
     else {
       swig.log.error('merge-node', 'Node validation of dependencies failed.');
