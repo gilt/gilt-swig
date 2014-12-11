@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "Runs specs (tests, expectations) for ui-* modules and web apps.",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",

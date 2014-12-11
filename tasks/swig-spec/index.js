@@ -48,10 +48,11 @@ module.exports = function (gulp, swig) {
     swig.log.success(null, 'Done\n');
   }
 
-  // tell `install` that we need devDependencies too.
-  swig.argv.devDependencies = true;
-
   gulp.task('spec', [swig.argv.module ? 'install' : 'install-noop'], function (done) {
+
+    // tell `install` that we need devDependencies too.
+    // this needs to be executed BEFORE install. not sure how to do that.
+    // swig.argv.devDependencies = true;
 
     var _ = require('underscore'),
       fs = require('fs'),
