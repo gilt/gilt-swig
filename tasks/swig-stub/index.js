@@ -29,7 +29,7 @@ module.exports = function (gulp, swig) {
       thingType,
       result,
       types = ['node'],
-      installCommand = 'npm install --tag=null --loglevel=info 2>&1',
+      installCommand = 'npm install --tag=null --loglevel=warn 2>&1',
       destPath,
       data = {
         name: 'Unknown',
