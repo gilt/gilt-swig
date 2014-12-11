@@ -27,7 +27,10 @@ module.exports = function (gulp, swig) {
 
     var response,
       thingType,
+      result,
       types = ['node'],
+      installCommand = 'npm install --tag=null --loglevel=info 2>&1',
+      destPath,
       data = {
         name: 'Unknown',
         description: 'Unknown',
@@ -99,12 +102,39 @@ module.exports = function (gulp, swig) {
       return;
     }
 
-    return gulp
-            .src(path.join(__dirname, 'templates', data.type, '/**/*'))
-            .pipe(stubs(swig))
-            .pipe(gulp.dest(path.join(swig.target.path, 'web-' + data.name)));
-            .on('exit', function exit () {
-              // ask about installing swig, npm
-            });
+    destPath = path.join(swig.target.path, 'web-' + data.name);
+
+    var stream = gulp
+      .src(path.join(__dirname, 'templates', data.type, '/**/*'))
+      .pipe(stubs(swig, data))
+      .pipe(gulp.dest(destPath))
+      .on('end', co(function * exit () {
+
+        // ask about installing swig, npm
+        var result = yield swig.log.prompt('We\'re ready to install your NPM modules. Hit Enter to begin...');
+        swig.log();
+
+        swig.log.info('', 'Starting `npm install`...\n');
+        result = yield swig.exec('cd ' + destPath + '; ' + installCommand, null, {
+          stdout: function (data) {
+            swig.log(data.trim().grey);
+          }
+        });
+
+        swig.log();
+
+        if (result.stdout.indexOf('not ok') > -1){
+          swig.log.error('swig-stub', 'One or more modules failed to install from npm.\n ' +
+            swig.log.padLeft('For more info, look here: ' + path.join(destPath, 'npm_debug.log').grey, 7));
+          return;
+        }
+
+        swig.log();
+        swig.log.success('swig-stub', 'Your app is now setup, run `swig install` and go nuts!\n');
+
+      }));
+
+    return stream;
+
   }));
 };

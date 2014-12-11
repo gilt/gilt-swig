@@ -18,7 +18,8 @@ module.exports = function stubsPlugin (swig, data) {
   var _ = require('underscore'),
     path = require('path'),
     through = require('through2'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    mustache = require('mustache');
 
   return through.obj(function stubsThrough (file, enc, cb) {
 
@@ -32,10 +33,13 @@ module.exports = function stubsPlugin (swig, data) {
       return;
     }
 
-    // TODO
-    // files with .mustache extension should be rendered using `data`,
-    // the file should be renamed in the stream
-    // and the content should be updated
+    var extension = path.extname(file.path).toLowerCase(),
+      contents;
+
+    if (extension === '.mustache') {
+      file.contents = new Buffer(mustache.render(file.contents.toString(), data));
+      file.path = file.path.replace('.mustache', '');
+    }
 
     cb(null, file);
 

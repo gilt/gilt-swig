@@ -45,6 +45,7 @@
   "dependencies": {
     "co": "3.x.x",
     "gulp-util": "*",
+    "mustache": "*",
     "prettyjson": "*",
     "through2" : "*",
     "underscore" : "*"
