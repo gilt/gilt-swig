@@ -144,6 +144,7 @@ module.exports = function (gulp) {
     tools: {
       run: load('swig-run'),
       'app-registry': load('swig-app-registry'),
+      stub: load('swig-stub'),
       tunnel: load('swig-tunnel'),
       zk: load('swig-zk')
     }
@@ -162,8 +163,7 @@ module.exports = function (gulp) {
       install: load('swig-install'),
       lint: load('swig-lint'),
       publish: load('swig-publish'),
-      spec: load('swig-spec'),
-      stub: load('swig-stub')
+      spec: load('swig-spec')
     }
   });
 
