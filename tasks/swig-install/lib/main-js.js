@@ -25,21 +25,22 @@ module.exports = function (gulp, swig, paths) {
     preamble = '/* Generated: '
       + now
       + '\n   This file is auto-generated during ui:install\n   It is inadvisable to write to it directly */\n',
-    templates = {
-      main: fs.readFileSync(path.join(__dirname, '../templates/main.js'), { encoding: 'utf-8' }),
-      config: fs.readFileSync(path.join(__dirname, '../templates/main-config.js'), { encoding: 'utf-8' })
-    },
+    template = fs.readFileSync(path.join(__dirname, '../templates/main.js'), { encoding: 'utf-8' }),
     files = '',
     destPath,
     pkg,
     configDeps = {},
     config,
-    mainjs,
-    specjs;
+    mainjs;
 
   // pull in raw file contents which need to be inserted into the template
-  glob.sync(path.join(paths.js, '/vendor/common/{require,require_wrapper,json}.js')).forEach(function (file) {
-    files += fs.readFileSync(file, { encoding: 'utf-8' }) + '\n';
+  ['require', 'gilt_require', 'json'].forEach(function (file) {
+    var filePath = path.join(paths.js, '/vendor/common/', file + '.js'),
+      basename = path.basename(filePath);
+
+    files += '\n// BEGIN: ' + basename + '\n\n' +
+              fs.readFileSync(filePath, { encoding: 'utf-8' }) + '\n';
+              '\n// END: ' + path.basename(file) + '\n';
   });
 
   // load the config dependencies
@@ -51,19 +52,13 @@ module.exports = function (gulp, swig, paths) {
   });
 
   // TEMPORARY
-  configDeps['config.jsBasePath'] = '/a/js/' + swig.pkg.name + '/';
+  configDeps['config.jsBasePath'] = configDeps['config.js_base_path'] = '/a/js/' + swig.pkg.name + '/';
 
   // handlebars is overkill here, run with a simple replace.
-  templates.main = templates.main
+  mainjs = template
                     .replace('{{preamble}}', preamble)
-                    .replace('{{files}}', files);
-
-  config = templates.config.replace('{{configs}}', JSON.stringify(configDeps || {}, null, '  '));
-  mainjs = templates.main.replace('{{config}}', config);
-
-  // create a js file separately that'll be used to run specs
-  specjs = templates.main.replace('{{config}}', '');
-  specjs = '/* This file is only used to run specs. */\n' + specjs;
+                    .replace('{{files}}', files)
+                    .replace('{{configs}}', JSON.stringify(configDeps || {}, null, '  '));
 
   swig.log.info('', 'Writing main.js to:');
 
@@ -71,12 +66,5 @@ module.exports = function (gulp, swig, paths) {
   fs.writeFileSync(destPath, mainjs);
 
   swig.log(swig.log.padLeft(destPath.grey, 2));
-
-  swig.log.info('', 'Writing main-spec.js to:');
-
-  destPath = path.join(paths.js, 'main-spec.js');
-  fs.writeFileSync(destPath, specjs);
-
-  swig.log(swig.log.padLeft(destPath.grey + '\n', 2));
 
 };

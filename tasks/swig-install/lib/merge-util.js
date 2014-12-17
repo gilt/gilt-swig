@@ -137,7 +137,7 @@ module.exports = function (gulp, swig) {
           'internal.less' : '1.6.x',
           'internal.modernizr' : '2.5.x',
           'internal.require' : '2.1.x',
-          'internal.require_wrapper' : '0.1.x',
+          'internal.gilt_require' : '0.x.x',
           'less.helpers' : '0.2.x'
         };
 
@@ -145,7 +145,7 @@ module.exports = function (gulp, swig) {
         fs.unlinkSync(packageTempPath); // posix name for 'delete'
       }
 
-      // extend the dependencies with the internal module requirements (require, require_wrapper, etc.)
+      // extend the dependencies with the internal module requirements (require, gilt_require, etc.)
       pkg.dependencies = _.extend(pkg.dependencies, internalModules);
 
       fs.writeFileSync(packageTempPath, JSON.stringify(pkg, null, 2));
