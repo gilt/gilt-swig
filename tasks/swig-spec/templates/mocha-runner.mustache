@@ -10,7 +10,6 @@
   <body>
     <div id="mocha"></div>
 
-    <script src="{{{sinonPath}}}/sinon.js"></script>
     <script src="{{{mochaPath}}}/mocha.js"></script>
     <script src="{{{chaiPath}}}/chai.js"></script>
 
@@ -36,7 +35,7 @@
       mocha.bail(false);
 
       {{#servers}}
-      gilt.endpoints.add({
+      mockEndpoints.push({
         method: '{{method}}',
         path: '{{{path}}}',
         code: {{responseCode}},

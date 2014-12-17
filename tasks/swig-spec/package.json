@@ -50,7 +50,6 @@
     "mocha": "*",
     "phantomjs": "^1.9.0",
     "through2" : "*",
-    "sinon": "*",
     "underscore" : "*",
     "mocha":"2.0.x",
 

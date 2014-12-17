@@ -10,7 +10,6 @@
   <body>
     <div id="jasmine"></div>
 
-    <script src="{{{sinonPath}}}/sinon.js"></script>
     <script src="{{{jasminePath}}}/jasmine-1.3.1.js"></script>
     <script src="{{{jasminePath}}}/jasmine-html-1.3.1.js"></script>
     <script src="{{{libPath}}}/jasmine-nyan-reporter.js"></script>
@@ -25,7 +24,7 @@
       targetExperience = '{{targetExperience}}';
 
       {{#servers}}
-      sinonEndpoints.push({
+      mockEndpoints.push({
         method: '{{method}}',
         path: '{{{path}}}',
         code: {{responseCode}},

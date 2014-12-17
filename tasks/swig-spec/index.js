@@ -58,7 +58,7 @@ module.exports = function (gulp, swig) {
       fs = require('fs'),
       path = require('path'),
       glob = require('glob'),
-      sinonApiDoc = require('./lib/sinon-apidoc.js'),
+      mockApiDoc = require('./lib/mock-apidoc.js'),
       tap = require('gulp-tap'),
 
       defaultFramework = 'jasmine',
@@ -66,7 +66,6 @@ module.exports = function (gulp, swig) {
       impl,
       options = {},
       scripts = [],
-      sinonPath = path.join(path.dirname(require.resolve('sinon')), '../pkg'),
       specFiles = [],
       specs = [],
       servers,
@@ -120,10 +119,10 @@ module.exports = function (gulp, swig) {
       specs.push('\'' + path.basename(file, path.extname(file)) + '\'');
     });
 
-    swig.log.info('', 'Enumerating APIDoc Sinon Servers...');
+    swig.log.info('', 'Enumerating Mock API...');
 
-    gulp.src(path.join(swig.target.path, '/json/sinon/**/*.json'))
-      .pipe(sinonApiDoc())
+    gulp.src(path.join(swig.target.path, '/json/mock/**/*.json'))
+      .pipe(mockApiDoc())
       .pipe(tap(function(file, t) {
         try {
           var fileServers = JSON.parse(file.contents);
@@ -141,7 +140,6 @@ module.exports = function (gulp, swig) {
           specs: specs.join(','),
           specsPath: specsPath,
           specFiles: specFiles,
-          sinonPath: sinonPath,
           servers: servers,
           useColors: (swig.argv.pretty !== 'false'),
           targetExperience: swig.argv.targetExperience || 'full'

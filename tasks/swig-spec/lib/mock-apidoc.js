@@ -5,7 +5,7 @@ module.exports = function () {
     path = require('path'),
     gutil = require('gulp-util'),
     through = require('through2'),
-    pluginName = 'sinon-apidoc';
+    pluginName = 'mock-apidoc';
 
   function padLeft (num) {
     return num < 10 ? '0' + num : '' + num;

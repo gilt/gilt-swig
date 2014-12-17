@@ -3,7 +3,7 @@
 
   var specNames = [],
     specFiles = [],
-    sinonEndpoints = [];
+    mockEndpoints = [];
 
   function isObject (obj) {
     var type = typeof obj;
