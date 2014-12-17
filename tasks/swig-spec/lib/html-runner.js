@@ -31,24 +31,21 @@
   gilt = window.gilt || (window.gilt = {});
 
   gilt.endpoints = {
-    // the default server, created when specs start
-    _server: null,
 
     add: function (endpoint) {
       sinonEndpoints.push(endpoint);
     },
 
     init: function initEndpoint (server, endpoints) {
-      if (typeof server === 'undefined') {
-        server = sinon.fakeServer.create();
-      }
+
+      server = sinon.fakeServer.create();
 
       if (endpoints) {
         for(var i = 0; i < endpoints.length; i++) {
           var srvr = endpoints[i];
           server.respondWith(srvr.method, new RegExp(srvr.path), [
             srvr.code,
-            { 'Content-Type': 'application/json' },
+            srvr.contentType || { 'Content-Type': 'application/json' },
             srvr.data
           ]);
         }
@@ -64,8 +61,6 @@
     },
 
     start: function (options) {
-
-      gilt.endpoints._server = gilt.endpoints.init(undefined, sinonEndpoints);
 
       // define any configs within package.json : configDependencies
       if (options.config) {

@@ -35,14 +35,16 @@
       // allows mocha to continue to run tests after the first failure.
       mocha.bail(false);
 
-      {{#servers}}
-      gilt.endpoints.add({
-        method: '{{method}}',
-        path: '{{{path}}}',
-        code: {{responseCode}},
-        data: '{{{responseData}}}'
-      });
-      {{/servers}}
+      gilt.endpoints.apiJson = [
+        {{#servers}}
+          {
+            method: '{{method}}',
+            path: '{{{path}}}',
+            code: {{responseCode}},
+            data: '{{{responseData}}}'
+          },
+        {{/servers}}
+      ];
 
       {{#specFiles}}
       gilt.specs.addFile('{{{.}}}');
