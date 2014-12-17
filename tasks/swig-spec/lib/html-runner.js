@@ -5,6 +5,23 @@
     specFiles = [],
     sinonEndpoints = [];
 
+  function isObject (obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  function extend (obj) {
+    if (!isObject(obj)) return obj;
+    var source, prop;
+    for (var i = 1, length = arguments.length; i < length; i++) {
+      source = arguments[i];
+      for (prop in source) {
+        obj[prop] = source[prop];
+      }
+    }
+    return obj;
+  };
+
   window.targetExperience = 'full';
 
   window.requireModules = function () {
@@ -30,42 +47,12 @@
 
   gilt = window.gilt || (window.gilt = {});
 
-  gilt.endpoints = {
-    // the default server, created when specs start
-    _server: null,
-
-    add: function (endpoint) {
-      sinonEndpoints.push(endpoint);
-    },
-
-    init: function initEndpoint (server, endpoints) {
-      if (typeof server === 'undefined') {
-        server = sinon.fakeServer.create();
-      }
-
-      if (endpoints) {
-        for(var i = 0; i < endpoints.length; i++) {
-          var srvr = endpoints[i];
-          server.respondWith(srvr.method, new RegExp(srvr.path), [
-            srvr.code,
-            { 'Content-Type': 'application/json' },
-            srvr.data
-          ]);
-        }
-      }
-
-      return server;
-    }
-  };
-
   gilt.specs = {
     addFile: function (file) {
       specFiles.push(file);
     },
 
     start: function (options) {
-
-      gilt.endpoints._server = gilt.endpoints.init(undefined, sinonEndpoints);
 
       // define any configs within package.json : configDependencies
       if (options.config) {
