@@ -46,6 +46,11 @@ module.exports = function (gulp, swig, paths) {
   glob.sync(path.join(swig.temp, '/**/node_modules/**/package.json')).forEach(function (file) {
     pkg = JSON.parse(fs.readFileSync(file, { encoding: 'utf-8' }));
     if (pkg.configDependencies) {
+      _.keys(pkg.configDependencies).forEach(function(key) {
+        if (pkg.configDependencies[key] === '') {
+          delete pkg.configDependencies[key];
+        }
+      });
       configDeps = _.extend(configDeps, pkg.configDependencies);
     }
   });
