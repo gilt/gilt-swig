@@ -23,7 +23,11 @@ module.exports = function (gulp, swig) {
       util = require('./merge-util')(gulp, swig),
       modulesPath = path.join(swig.temp, '/node_modules'),
       packages = glob.sync(path.join(modulesPath, '/**/package.json')),
-      deps;
+
+      // we need to merge whatever the app defined (uiDeps) as well
+      // since there may be conflicts between the app and module deps
+      basePkg = _.extend({}, swig.pkg),
+      deps = util.extract(basePkg, {}, path.basename(swig.cwd));
 
     swig.log.task('Merging Node Modules Package(s)');
 
@@ -32,8 +36,7 @@ module.exports = function (gulp, swig) {
       deps = util.extract(pkg, deps, pkg.name);
     });
 
-    swig.log.success(null, 'Done\n');
-    swig.log.task('Extracting dependencies');
+    swig.log.info('merge-modules', 'Extracting dependencies');
 
     deps = util.iterate(deps);
 

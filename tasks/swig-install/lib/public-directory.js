@@ -77,6 +77,28 @@ module.exports = function (gulp, swig) {
       });
     });
 
+    // group by basename, and take the 'topmost' module in the hierarchy
+    azModules = _.groupBy(azModules, function (module) {
+      return path.basename(module.path);
+    });
+
+    // pull out the 'winning' module path, for each module
+    azModules = _.map(azModules, function (modules, name) {
+      // the modules arg will be [{ name:, path: }, ...]
+
+      if (modules.length === 1) {
+        return modules[0];
+      }
+
+      // glob will almost always return the right order,
+      // but let's assert this to be safe. we can spare the cycles.
+      modules = _.sortBy(modules, function (module) {
+        return module.path.length;
+      });
+
+      return modules[0];
+    });
+
     // and now we pretty sort a-z for various output
     // we dont reset azModules to the sorted array because we need it dirty for deps.less
     _.sortBy(azModules, function (mod) { return mod.name; }).forEach(function (mod) {

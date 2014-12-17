@@ -23,9 +23,7 @@ module.exports = function (gulp, swig, util) {
       pkg;
 
     swig.log.task('Merging Node App Package(s)');
-
-    swig.log.success(null, 'Done\n');
-    swig.log.task('Extracting dependencies');
+    swig.log.info('merge-node', 'Extracting dependencies');
 
     pkg = _.extend({}, swig.pkg);
 
