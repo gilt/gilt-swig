@@ -22,6 +22,7 @@
     return obj;
   };
 
+  window.mockEndpoints = mockEndpoints;
   window.targetExperience = 'full';
 
   window.requireModules = function () {
