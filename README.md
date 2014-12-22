@@ -61,11 +61,11 @@ Swig is broken down into a few different categories for the sake of organization
 
 These modules form the foundation of Swig.
 
-  - ```swig-cli```
+  - `swig-cli`
     Intended to be installed globally, this module is the starting off point
     for using swig.
 
-  - ```swig-project```
+  - `swig-project`
     The launching point module installed in each local directory where swig
     is intended to be used. This 'parent' module contains the dependencies and
     setup code to allow swig to do it's thing.
