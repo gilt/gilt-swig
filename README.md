@@ -35,7 +35,7 @@ swig init && swig
 
   We recommend adding swig to your user directory, making the tools swig provides available in most terminal sessions.
 
-For more information on swig's command line interface, see the [swig-cli README](https://github.com/gilt/gilt-swig/tree/master/swig-cli)
+For more information on swig's command line interface, see the [swig-cli README](https://github.com/gilt/gilt-swig/tree/master/swig-cli/README.md)
 
 ### Technical Requirements
 
