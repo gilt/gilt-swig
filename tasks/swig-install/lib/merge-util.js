@@ -39,6 +39,11 @@ module.exports = function (gulp, swig) {
         push(key, value);
       });
 
+      // add dependencies specifically for specs. we'll prune these during bundling
+      _.each((pkg.gilt && pkg.gilt.specDependencies), function (value, key) {
+        push(key, value);
+      });
+
       if (pkg.lazyDependencies) {
         _.each(pkg.lazyDependencies, function (value, key) {
           push(key, value);
