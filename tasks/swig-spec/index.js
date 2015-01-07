@@ -48,7 +48,11 @@ module.exports = function (gulp, swig) {
     swig.log.success(null, 'Done\n');
   }
 
-  gulp.task('spec', [swig.argv.module ? 'install' : 'install-noop'], function (done) {
+  gulp.task('spec-install', [swig.argv.module ? 'install' : 'install-noop'], function (done) {
+    done();
+  });
+
+  gulp.task('spec', ['spec-install', 'lint'], function (done) {
 
     // tell `install` that we need devDependencies too.
     // this needs to be executed BEFORE install. not sure how to do that.
