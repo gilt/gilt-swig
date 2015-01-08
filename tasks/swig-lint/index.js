@@ -85,6 +85,14 @@ module.exports = function (gulp, swig) {
     templates: source('templates', 'handlebars')
   };
 
+  // we never want to lint reset.less|css files since they'll almost always have linting errors
+  if (swig.project.type === 'webapp') {
+    paths.css = [
+      paths.css,
+      '!' + path.join(swig.target.path, 'public/css/', baseName, '/src/**/reset.{css,less}')
+    ];
+  }
+
   // load some of our misc linting tasks
   require('./lib/package-version')(gulp, swig, paths);
   require('./lib/unicode')(gulp, swig, paths);
