@@ -49,7 +49,7 @@ module.exports = function (gulp, swig) {
     path = require('path'),
 
     jshint = require('gulp-jshint'),
-    recess = require('gulp-recess'),
+    recess = require('gulp-recess-plus'),
     handlebars = require('gulp-handlebars'),
     addsrc = require('gulp-add-src'),
     buffer = require('gulp-buffer'),
@@ -64,7 +64,7 @@ module.exports = function (gulp, swig) {
     baseSource,
     paths;
 
-  function source(type, extension) {
+  function source (type, extension) {
     return baseSource
             .replace(/\{type\}/g, type)
             .replace(/\{extension\}/g, extension);

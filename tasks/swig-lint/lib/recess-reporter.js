@@ -91,6 +91,9 @@ module.exports = function (swig) {
       swig.log.error('lint-less', 'You\'ve got ' + problems.toString().magenta + ' warnings. Please do some cleanup before proceeding.');
       process.exit(0);
     }
+    else {
+      swig.log('');
+    }
 
     cb();
   });
