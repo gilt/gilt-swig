@@ -68,11 +68,16 @@ module.exports = function (gulp, swig) {
 
   gulp.task('spec', function (done) {
 
-    // tell `install` that we need devDependencies too. this needs to be executed BEFORE install.
-    swig.argv.devDependencies = true;
+    var installTask = 'install-noop';
+
+    if (swig.argv.module) {
+      // tell `install` that we need devDependencies too. this needs to be executed BEFORE install.
+      swig.argv.devDependencies = true;
+      installTask = 'install';
+    }
 
     swig.seq(
-      swig.argv.module ? 'install' : 'install-noop',
+      installTask,
       'lint',
       'spec-setup',
       'spec-mock-apidoc',
