@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "Runs specs (tests, expectations) for ui-* modules and web apps.",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -40,10 +40,13 @@
   "dependencies": {
     "chai": "*",
     "glob" : "*",
+    "gulp-concat": "*",
     "gulp-file": "*",
     "gulp-mocha-phantomjs": "0.5.x",
     "gulp-tap": "*",
+    "gulp-wrap": "*",
     "gulp-util": "*",
+    "handlebars": "*",
     "jasmine-reporters": "~1.0.0",
     "minimist": "*",
     "mustache": "*",

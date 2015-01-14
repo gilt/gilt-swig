@@ -47,7 +47,7 @@ module.exports = function (gulp, swig, options, done) {
     swig.log('');
 
     file('runner.html', runner, { src: true })
-      .pipe(gulp.dest(options.specsPath))
+      .pipe(gulp.dest(options.runnerPath))
       .pipe(mocha({
         reporter: nyanPath,
         phantomjs: {

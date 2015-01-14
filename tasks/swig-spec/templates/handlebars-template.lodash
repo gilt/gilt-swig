@@ -1,0 +1,5 @@
+gilt.require(['vendor.handlebars'], function (Handlebars) {
+
+  Handlebars.templates = Handlebars.templates || {};
+  <%= contents %>
+});
