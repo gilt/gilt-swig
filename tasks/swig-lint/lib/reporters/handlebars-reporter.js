@@ -19,6 +19,7 @@ module.exports = function (swig) {
     through = require('through2'),
     gutil = require('gulp-util'),
     res,
+    fileCount = 0,
     errors = false;
 
   res = through.obj(function (file, enc, cb) {
@@ -33,14 +34,18 @@ module.exports = function (swig) {
       return;
     }
 
-    swig.log.success(null, file.path.replace('.js', '.handlebars'));
+    fileCount++;
+
+    // listing all of the files that were successful is awefully verbose
+    if (swig.argv.verbose || swig.argv.poolparty) {
+      swig.log.success(null, file.path.replace('.js', '.handlebars'));
+    }
 
     cb(null, file);
-
   },
   function flush (cb) {
     if (!errors) {
-      swig.log.success(null, 'Complete');
+      swig.log('   ' + fileCount + ' files lint-free\n');
     }
     cb();
   });

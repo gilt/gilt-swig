@@ -19,7 +19,7 @@ module.exports = function (swig) {
     through = require('through2'),
     gutil = require('gulp-util'),
     success = true,
-    filecount = 0,
+    fileCount = 0,
     problems = 0,
     maxProblems = 10,
     res;
@@ -36,7 +36,7 @@ module.exports = function (swig) {
       return;
     }
 
-    filecount++;
+    fileCount++;
 
     var recess = file.recess,
       liner = /^([0-9]+)(\.\s)(.+)$/i,
@@ -77,17 +77,19 @@ module.exports = function (swig) {
 
     }
     else {
-      swig.log.success(null, file.path);
+      // listing all of the files that were successful is awefully verbose
+      if (swig.argv.verbose || swig.argv.poolparty) {
+        swig.log.success(null, file.path);
+      }
     }
 
     cb(null, file);
 
   }, function (cb) {
-    if (filecount === 0 || success) {
-      swig.log.write('  ');
-      swig.log.success(null, '  ' + filecount + ' file(s), success.\n');
+    if (fileCount === 0 || success) {
+      swig.log('   ' + fileCount + ' files lint-free\n');
     }
-    else if (filecount > maxProblems || problems > maxProblems) {
+    else if (fileCount > maxProblems || problems > maxProblems) {
       swig.log.error('lint-less', 'You\'ve got ' + problems.toString().magenta + ' warnings. Please do some cleanup before proceeding.');
       process.exit(0);
     }

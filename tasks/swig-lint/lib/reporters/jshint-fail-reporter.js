@@ -22,7 +22,8 @@ module.exports = function (gulp, swig) {
 
     var through = require('through2'),
       gutil = require('gulp-util'),
-      total = 0,
+      fileCount = 0,
+      errorCount = 0,
       hasErrors = false;
 
     return through.obj(function (file, enc, cb) {
@@ -36,10 +37,14 @@ module.exports = function (gulp, swig) {
         return;
       }
 
+      if (file.jshint && !file.jshint.ignored) {
+        fileCount++;
+      }
+
       if (file.jshint && !file.jshint.success && !file.jshint.ignored) {
         var results = file.jshint.results;
 
-        total += results.length;
+        errorCount += results.length;
 
         if (!hasErrors) {
           results.forEach(function (e) {
@@ -54,17 +59,16 @@ module.exports = function (gulp, swig) {
       cb(null, file);
     },
     function flush (cb) {
-
       if (hasErrors) {
         swig.log.error('lint-script', 'Please correct errors in ' + 'red'.red + ' before proceeding.');
         process.exit(0);
       }
-      else if (total > maxWarnings) {
-        swig.log.error('lint-script', 'You\'ve got ' + total.toString().magenta + ' warnings.\nPlease do some cleanup before proceeding.');
+      else if (errorCount > maxWarnings) {
+        swig.log.error('lint-script', 'You\'ve got ' + errorCount.toString().magenta + ' warnings.\nPlease do some cleanup before proceeding.');
         process.exit(0);
       }
       else {
-        swig.log.success(null, 'Complete\n');
+        swig.log('   ' + fileCount + ' files lint-free\n');
         cb();
       }
 

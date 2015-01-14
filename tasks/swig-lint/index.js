@@ -45,75 +45,78 @@ module.exports = function (gulp, swig) {
     return;
   }
 
-  var _ = require('underscore'),
-    path = require('path'),
-
-    jshint = require('gulp-jshint'),
-    recess = require('gulp-recess-plus'),
-    handlebars = require('gulp-handlebars'),
-    addsrc = require('gulp-add-src'),
-    buffer = require('gulp-buffer'),
-    gutil = require('gulp-util'),
-
-    mock = require('./lib/mock')(gulp, swig),
-    recessReporter = require('./lib/recess-reporter')(swig),
-    jsFailReporter = require('./lib/jshint-fail-reporter')(gulp, swig),
-    handlebarsReporter = require('./lib/handlebars-reporter')(swig),
-
-    baseName,
-    baseSource,
+  var path = require('path'),
     paths;
 
-  function source (type, extension) {
-    return baseSource
-            .replace(/\{type\}/g, type)
-            .replace(/\{extension\}/g, extension);
-  }
+  gulp.task('lint-setup', function (done) {
 
-  // setup our glob paths
-  if (swig.project.type === 'webapp') {
-    baseName = path.basename(swig.target.path);
-    baseSource = path.join(swig.target.path, 'public/{type}/', baseName, '/src/**/*.{extension}');
-  }
-  else {
-    baseSource = path.join(swig.target.path, '/**/*.{extension}');
-  }
+    var baseName,
+      baseSource;
 
-  paths = {
-    js: source('js', 'js'),
-    css: source('css', '{css,less}'),
-    templates: source('templates', 'handlebars')
-  };
+    function source (type, extension) {
+      return baseSource
+              .replace(/\{type\}/g, type)
+              .replace(/\{extension\}/g, extension);
+    }
 
-  // we never want to lint reset.less|css files since they'll almost always have linting errors
-  if (swig.project.type === 'webapp') {
-    paths.css = [
-      paths.css,
-      '!' + path.join(swig.target.path, 'public/css/', baseName, '/src/**/reset.{css,less}')
-    ];
-  }
+    if (swig.project.type === 'webapp') {
+      baseName = path.basename(swig.target.path);
+      baseSource = path.join(swig.target.path, 'public/{type}/', baseName, '/src/**/*.{extension}');
+    }
+    else {
+      baseSource = path.join(swig.target.path, '/**/*.{extension}');
+    }
+
+    paths = {
+      js: source('js', 'js'),
+      css: source('css', '{css,less}'),
+      templates: source('templates', 'handlebars')
+    };
+
+    // we never want to lint reset.less|css files since they'll almost always have linting errors
+    if (swig.project.type === 'webapp') {
+      paths.css = [
+        paths.css,
+        '!' + path.join(swig.target.path, 'public/css/', baseName, '/src/**/reset.{css,less}')
+      ];
+    }
+
+    // some hacky shit so that package-version and unicode tasks can be loaded
+    // normally from another file, but still have access to this.
+    // minor minor namespace pollution for simplicity. please don't follow this pattern.
+    swig.linter = { paths: paths };
+
+    done();
+
+  });
 
   // load some of our misc linting tasks
-  require('./lib/package-version')(gulp, swig, paths);
-  require('./lib/unicode')(gulp, swig, paths);
+  require('./lib/tasks/package-version')(gulp, swig);
+  require('./lib/tasks/unicode')(gulp, swig);
 
-  // load the major linting tasks
-  gulp.task('lint-script', function () {
-    var jshintrc = path.join(__dirname, '.jshintrc');
+  gulp.task('lint-script', ['lint-setup'], function () {
 
-    swig.log.task('Linting Javascript');
+    var jshint = require('gulp-jshint'),
+      jshintrc = path.join(__dirname, '.jshintrc'),
+      failReporter = require('./lib/reporters/jshint-fail-reporter')(gulp, swig);
+
+    swig.log.task('Linting Javascript', { noNewline: true });
 
     return gulp.src(paths.js)
       .pipe(jshint(jshintrc))
+      .pipe(failReporter())
       .pipe(jshint.reporter('jshint-stylish'))
-      .pipe(jsFailReporter());
   });
 
-  gulp.task('lint-css', function () {
+  gulp.task('lint-css', ['lint-setup'], function () {
 
     swig.log.task('Linting CSS and LESS');
 
-    var recessOpts = {
+    var buffer = require('gulp-buffer'),
+      mock = require('./lib/mock')(gulp, swig),
+      recess = require('gulp-recess-plus'),
+      reporter = require('./lib/reporters/recess-reporter')(swig),
+      recessOpts = {
         strictPropertyOrder: false,
         noOverqualifying: false
       };
@@ -122,26 +125,30 @@ module.exports = function (gulp, swig) {
       .pipe(buffer())
       .pipe(mock())
       .pipe(recess(recessOpts))
-      .on('error', recessReporter.fail)
-      .pipe(recessReporter);
+      .on('error', reporter.fail)
+      .pipe(reporter);
   });
 
-  gulp.task('lint-handlebars', function (cb) {
+  gulp.task('lint-handlebars', ['lint-setup'], function () {
     swig.log.task('Linting Handlebars Templates');
+
+    var handlebars = require('gulp-handlebars'),
+      reporter = require('./lib/reporters/handlebars-reporter')(swig);
 
     return gulp.src(paths.templates)
       .pipe(handlebars())
-      .on('error', handlebarsReporter.fail)
-      .pipe(handlebarsReporter);
+      .on('error', reporter.fail)
+      .pipe(reporter);
   });
 
-  gulp.task('lint', function (cb) {
+  gulp.task('lint', function (done) {
     swig.seq(
       'lint-script',
       'lint-package-version',
       'lint-unicode',
       'lint-css',
       'lint-handlebars',
-    cb);
+      done
+    );
   });
 };

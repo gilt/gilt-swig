@@ -13,7 +13,7 @@
    Brought to you by the fine folks at Gilt (http://github.com/gilt)
 */
 
-module.exports = function (gulp, swig, paths) {
+module.exports = function (gulp, swig) {
 
   var _ = require('underscore'),
     through = require('through2');
@@ -23,6 +23,7 @@ module.exports = function (gulp, swig, paths) {
     var regex = /[^\u0000-\u00ff]/,
       success = true,
       fileSuccess = true,
+      fileCount = 0,
       content,
       matches;
 
@@ -31,6 +32,8 @@ module.exports = function (gulp, swig, paths) {
       if (file.isBuffer()) {
         content = file.contents.toString();
         content = content.split('\n');
+
+        fileCount++;
 
         _.each(content, function (line, index) {
           fileSuccess = !regex.test(line);
@@ -49,7 +52,10 @@ module.exports = function (gulp, swig, paths) {
         });
 
         if (fileSuccess) {
-          swig.log.success(null, file.path);
+          // listing all of the files that were successful is awefully verbose
+          if (swig.argv.verbose || swig.argv.poolparty) {
+            swig.log.success(null, file.path);
+          }
         }
       }
 
@@ -60,18 +66,18 @@ module.exports = function (gulp, swig, paths) {
         swig.log.warn('Please clean up any unicode characters, they can cause problems.');
       }
       else {
-        swig.log.success(null, 'Complete\n');
+        swig.log('   ' + fileCount + ' files lint-free\n');
       }
 
       cb();
     });
   }
 
-  gulp.task('lint-unicode', function () {
+  gulp.task('lint-unicode', ['lint-setup'], function () {
 
     swig.log.task('Linting Unicode Characters');
 
-    return gulp.src(paths.js)
+    return gulp.src(swig.linter.paths.js)
       .pipe(plugin());
   });
 
