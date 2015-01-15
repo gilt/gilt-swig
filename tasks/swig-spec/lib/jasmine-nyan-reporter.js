@@ -1,6 +1,6 @@
 (function() {
   if (!jasmine) {
-    throw new Exception("jasmine library does not exist in global namespace!");
+    throw new Exception("Jasmine library does not exist in global namespace!");
   }
 
   function isObject (obj) {

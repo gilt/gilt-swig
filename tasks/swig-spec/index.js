@@ -199,7 +199,7 @@ module.exports = function (gulp, swig) {
     try {
       swig.log.info('', 'Loading ' + framework + '...');
 
-      impl = require('./lib/' + framework.toLowerCase());
+      impl = require('./lib/frameworks/' + framework.toLowerCase());
     }
     catch (e) {
       if (e.code === 'MODULE_NOT_FOUND') {
@@ -245,17 +245,4 @@ module.exports = function (gulp, swig) {
     // fire our specs implementation (jasmine, mocha, etc..)
     impl(gulp, swig, options, done);
   });
-
-  // gulp.task('spec', function (done) {
-
-  //   swig.seq([
-  //     swig.argv.module ? 'install' : 'install-noop',
-  //     'lint',
-  //     'spec-mock-apidoc',
-  //     'spec-hbs',
-  //     'spec'
-  //   ]);
-
-  // });
-
 };

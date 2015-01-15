@@ -19,36 +19,43 @@ module.exports = function (gulp, swig, options, done) {
     file = require('gulp-file'),
     fs = require('fs'),
     path = require('path'),
-    jasmine = require('./gulp-jasmine-phantomjs/gulp-jasmine-phantomjs.js'),
+    mocha = require('gulp-mocha-phantomjs'),
     mustache = require('mustache'),
     gutil = require('gulp-util'),
 
-    jasminePath = path.join(__dirname, 'gulp-jasmine-phantomjs/lib/jasmine'),
+    mochaPath = path.dirname(require.resolve('mocha')),
 
-    runnerPath = path.join(__dirname, '../templates/jasmine-runner.mustache'),
+    // we have to reference this reporter by file path rather than name
+    // due to a compliation problem with the Prototype
+    nyanPath = path.join(mochaPath, '/lib/reporters/nyan.js'),
+
+    chaiPath = path.dirname(require.resolve('chai')),
+    runnerPath = path.join(__dirname, '../../templates/mocha-runner.mustache'),
     runner = fs.readFileSync(runnerPath, 'utf-8');
 
     swig.log.info('', 'Rendering Runner...\n');
 
     options = _.extend(options, {
-      jasminePath: jasminePath,
+      mochaPath: mochaPath,
+      chaiPath: chaiPath,
       libPath: __dirname
     });
 
     runner = mustache.render(runner, options);
 
-    swig.log.task('Running Specs with PhantomJS+Jasmine');
+    swig.log.task('Running Specs with PhantomJS+Mocha');
     swig.log('');
 
     file('runner.html', runner, { src: true })
       .pipe(gulp.dest(options.runnerPath))
-      .pipe(jasmine({
+      .pipe(mocha({
+        reporter: nyanPath,
         phantomjs: {
           webSecurityEnabled: false,
           localToRemoteUrlAccessEnabled: true,
           ignoreSslErrors: true
         }
       }))
-      .on('error', done)
+      .on('error', function() { done(new gutil.PluginError('swig-spec', 'Test failure')); })
       .on('end', done);
 };
