@@ -22,7 +22,7 @@ module.exports = function (gulp, swig) {
   var _ = require('underscore'),
     fs = require('fs'),
     path = require('path'),
-    glob = require('glob'),
+    glob = require('globby'),
     concat = require('gulp-concat'),
     tap = require('gulp-tap'),
     wrap = require('gulp-wrap'),
@@ -184,9 +184,22 @@ module.exports = function (gulp, swig) {
       specFiles = [],
       specs = [],
       specsPath = path.join(swig.target.path, 'public/spec/', swig.pkg.name),
-      runnerPath = path.join(specsPath, '/runner'),
-      srcPath = path.join(swig.target.path, 'public/js/', swig.pkg.name),
+      runnerPath,
+      requireBasePath = path.join(swig.target.path, 'public/js/', swig.pkg.name),
       tempPath;
+
+    if (swig.project.type !== 'webapp') {
+      // if we're in a ui-* modules repo
+      tempPath = path.join(swig.temp, 'install', swig.pkg.name);
+      specsPath = path.join(swig.target.path, 'spec/');
+      requireBasePath = path.join(tempPath, 'public/js/', swig.pkg.name);
+
+      // what we're doing here is telling require to use the files local to /js
+      // for the module first, rather than what's in the temp ui-install dir.
+      scripts = scripts.concat(glob.sync(path.join(swig.target.path, 'js/**/*.js')));
+    }
+
+    runnerPath = path.join(specsPath, '/runner');
 
     if (!fs.existsSync(runnerPath)) {
       fs.mkdirSync(runnerPath);
@@ -211,13 +224,6 @@ module.exports = function (gulp, swig) {
       }
     }
 
-    if (swig.project.type !== 'webapp') {
-      // if we're in a ui-* modules repo
-      tempPath = path.join(swig.temp, 'install', swig.pkg.name)
-      srcPath = path.join(tempPath, 'public/js/', swig.pkg.name);
-      specsPath = path.join(swig.target.path, 'spec/');
-    }
-
     swig.log.info('', 'Enumerating Specs...');
 
     // enum all of the files in the specs directory
@@ -230,7 +236,7 @@ module.exports = function (gulp, swig) {
     });
 
     options = {
-      baseUrl: srcPath,
+      baseUrl: requireBasePath,
       config: JSON.stringify(swig.pkg.configDependencies || {}, null, 2),
       scripts: scripts,
       runnerPath: runnerPath,

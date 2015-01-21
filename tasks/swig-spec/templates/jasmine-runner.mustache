@@ -12,7 +12,7 @@
 
     <script src="{{{jasminePath}}}/jasmine-1.3.1.js"></script>
     <script src="{{{jasminePath}}}/jasmine-html-1.3.1.js"></script>
-    <script src="{{{libPath}}}/jasmine-nyan-reporter.js"></script>
+    <script src="{{{libPath}}}/../jasmine-nyan-reporter.js"></script>
 
   {{#scripts}}
     <script src="{{{.}}}"></script>
@@ -41,9 +41,9 @@
         config: {{{config}}},
         targetExperience: '{{targetExperience}}',
         callback: function () {
-          if (window.__runner) {
+          if (window.__runner__) {
 
-            window.__runner.run({
+            window.__runner__.run({
               reporters: [
                 new jasmine.NyanReporter({
                   verbosity: 3,

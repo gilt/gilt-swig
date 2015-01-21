@@ -19,11 +19,11 @@ module.exports = function (gulp, swig, options, done) {
     file = require('gulp-file'),
     fs = require('fs'),
     path = require('path'),
-    jasmine = require('./gulp-jasmine-phantomjs/gulp-jasmine-phantomjs.js'),
+    jasmine = require('gulp-jasmine-phantomjs'),
     mustache = require('mustache'),
     gutil = require('gulp-util'),
 
-    jasminePath = path.join(__dirname, 'gulp-jasmine-phantomjs/lib/jasmine'),
+    jasminePath = path.join(path.dirname(require.resolve('gulp-jasmine-phantomjs')), 'vendor/jasmine-1.3.1'),
 
     runnerPath = path.join(__dirname, '../../templates/jasmine-runner.mustache'),
     runner = fs.readFileSync(runnerPath, 'utf-8');
