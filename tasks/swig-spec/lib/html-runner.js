@@ -54,16 +54,6 @@
     },
 
     start: function (options) {
-
-      // define any configs within package.json : configDependencies
-      if (options.config) {
-        for (var key in options.config) {
-          if (Object.prototype.hasOwnProperty.call(options.config, key)) {
-            gilt.define(key, function () { return options.config[key] });
-          }
-        }
-      }
-
       if (options.targetExperience) {
         window.targetExperience = options.targetExperience;
       }

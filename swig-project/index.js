@@ -75,7 +75,9 @@ module.exports = function (gulp) {
     var rcPath = path.join(process.env.HOME, '/.swigrc');
 
     if (!fs.existsSync(rcPath)) {
-      swig.log.warn('swig-project', '.swigrc not found at: ' + '~/.swigrc'.grey + '. Please grab a copy from ' + '/web/tools/config/user.\n'.grey);
+      swig.log.error('swig-project', '.swigrc not found at: ' + '~/.swigrc'.grey + '. Please grab a copy from ' + '/web/tools/config/user.\n'.grey);
+      swig.log('   .swigrc is required because it contains internal information that swig needs.');
+      process.exit(1);
     }
     else {
       swig.rc = JSON.parse(fs.readFileSync(rcPath));

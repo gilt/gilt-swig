@@ -261,7 +261,6 @@ module.exports = function (gulp, swig) {
 
     options = {
       baseUrl: requireBasePath,
-      config: JSON.stringify(swig.pkg.configDependencies || {}, null, 2),
       scripts: scripts,
       runnerPath: runnerPath,
       specs: specs.join(','),
