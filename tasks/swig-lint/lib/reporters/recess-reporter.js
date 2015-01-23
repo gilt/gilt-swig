@@ -87,7 +87,12 @@ module.exports = function (swig) {
 
   }, function (cb) {
     if (fileCount === 0 || success) {
-      swig.log('   ' + fileCount + ' files lint-free\n');
+      if (fileCount){
+        swig.log('   ' + fileCount + ' files lint-free\n');
+      }
+      else {
+        swig.log('    No files to lint.\n');
+      }
     }
     else if (fileCount > maxProblems || problems > maxProblems) {
       swig.log.error('lint-less', 'You\'ve got ' + problems.toString().magenta + ' warnings. Please do some cleanup before proceeding.');

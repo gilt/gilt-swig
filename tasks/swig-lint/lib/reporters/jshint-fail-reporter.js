@@ -68,7 +68,12 @@ module.exports = function (gulp, swig) {
         process.exit(0);
       }
       else {
-        swig.log('   ' + fileCount + ' files lint-free\n');
+        if (fileCount){
+          swig.log('   ' + fileCount + ' files lint-free\n');
+        }
+        else {
+          swig.log('    No files to lint.\n');
+        }
         cb();
       }
 

@@ -52,7 +52,12 @@ module.exports = function (gulp, swig) {
         swig.log.warn('Please make sure you\'re retuning an object containing ' + '"version: \'$$PACKAGE_VERSION$$\'"'.bold);
       }
       else {
-        swig.log('   ' + fileCount + ' files lint-free\n');
+        if (fileCount){
+          swig.log('   ' + fileCount + ' files lint-free\n');
+        }
+        else {
+          swig.log('    No files to lint.\n');
+        }
       }
       cb();
     });

@@ -66,7 +66,12 @@ module.exports = function (gulp, swig) {
         swig.log.warn('Please clean up any unicode characters, they can cause problems.');
       }
       else {
-        swig.log('   ' + fileCount + ' files lint-free\n');
+        if (fileCount){
+          swig.log('   ' + fileCount + ' files lint-free\n');
+        }
+        else {
+          swig.log('    No files to lint.\n');
+        }
       }
 
       cb();

@@ -45,7 +45,12 @@ module.exports = function (swig) {
   },
   function flush (cb) {
     if (!errors) {
-      swig.log('   ' + fileCount + ' files lint-free\n');
+      if (fileCount){
+        swig.log('   ' + fileCount + ' files lint-free\n');
+      }
+      else {
+        swig.log('    No files to lint.\n');
+      }
     }
     cb();
   });
