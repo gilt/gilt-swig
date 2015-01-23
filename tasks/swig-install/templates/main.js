@@ -2,6 +2,9 @@
 // The createConfig definition has been moved to internal.gilt_require.
 // hook the existing require callback, if one has already been setup inline,
 // to ensure that inline config pairs are defined first.
+
+require = require || {};
+
 var _cb = require.callback;
 
 require.callback = function () {
