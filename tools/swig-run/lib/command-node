@@ -14,4 +14,4 @@
 
 export GILT_ENV=development;
 source ~/.nvm/nvm.sh;
-nvm run 0.11 --harmony app
+nvm run 0.11 --harmony $@ app

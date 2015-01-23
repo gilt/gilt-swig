@@ -88,7 +88,13 @@ module.exports = function (gulp, swig) {
     if (node.exists()) {
       swig.log.task('Checking validity of the app');
       errors = node.valid();
+
       if (!errors.length) {
+
+        if (swig.argv.debug) {
+          node.args.push('--debug');
+        }
+
         swig.log.task('Running app');
         swig.log();
         run(cb);
