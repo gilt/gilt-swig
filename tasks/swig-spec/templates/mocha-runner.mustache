@@ -13,15 +13,17 @@
     <script src="{{{mochaPath}}}/mocha.js"></script>
     <script src="{{{chaiPath}}}/chai.js"></script>
 
+    <script>
+      // we've gotta declare this before errrrything else
+      targetExperience = '{{targetExperience}}';
+    </script>
+
   {{#scripts}}
     <script src="{{{.}}}"></script>
   {{/scripts}}
     <script src="{{{libPath}}}/../html-runner.js"></script>
 
     <script>
-
-      targetExperience = '{{targetExperience}}';
-
       var expect = chai.expect,
         assert = chai.assert;
 
