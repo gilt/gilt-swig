@@ -1,7 +1,7 @@
 {
   "name": "swig-spec",
   "description": "Runs specs (tests, expectations) for ui-* modules and web apps.",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -39,32 +39,29 @@
   },
   "dependencies": {
     "chai": "*",
-    "glob" : "*",
+    "glob": "*",
+    "globby": "^1.1.0",
     "gulp-concat": "*",
     "gulp-file": "*",
     "gulp-jasmine-phantomjs": "git://github.com/gilt/gulp-jasmine-phantomjs.git",
     "gulp-mocha-phantomjs": "0.5.x",
     "gulp-tap": "*",
-    "gulp-wrap": "*",
     "gulp-util": "*",
+    "gulp-wrap": "*",
     "handlebars": "*",
+    "internal.browser_detect": "0.1.x",
+    "internal.gilt_require": "0.0.x",
+    "internal.json": "2.0.x",
+    "internal.modernizr": "2.5.x",
+    "internal.require": "2.1.x",
     "jasmine-reporters": "~1.0.0",
     "minimist": "*",
+    "mocha": "2.0.x",
     "mustache": "*",
-    "mocha": "*",
     "phantomjs": "^1.9.0",
-    "through2" : "*",
-    "underscore" : "*",
-    "mocha":"2.0.x",
-
-    "internal.browser_detect" : "0.1.x",
-    "internal.json" : "2.0.x",
-    "internal.modernizr" : "2.5.x",
-    "internal.require" : "2.1.x",
-    "internal.gilt_require" : "0.0.x"
+    "through2": "*",
+    "underscore": "*"
   },
-  "devDependencies": {
-
-  },
+  "devDependencies": {},
   "main": "index.js"
 }
