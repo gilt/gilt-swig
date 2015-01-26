@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+</head>
+</body>
+
+<style>
+  body { font: 12px Helvetica, Arial; padding: 20; max-width: 800px; }
+
+  /* this css is inlined into the html below before it is sent as email content */
+  h2 { font-size: 18px; padding: 8px 10px; margin: 10px 0; background: #f7f7f7; border: 1px solid #ddd; border-radius: 3px; font-weight: bold; color: #333; text-shadow: 0 1px rgba(255,255,255,0.5); }
+  h3 { font-size: 13px; padding-left: 10px; }
+
+  .fileList { margin: 0 20px; }
+  .fileList td { border-top: 1px solid #eee; vertical-align: middle; padding: 4px 0; }
+  .fileList tr:first-child td { border: 0; }
+  .fileList a { font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+  .fileList .additions { color: #55a532; font-weight: bold; font-size: 12px; }
+  .fileList .deletions { color: #bd2c00; font-weight: bold; font-size: 12px; padding-left: 4px; }
+  .fileList .graph { padding-left: 10px; }
+
+  .commit { margin-left: 20px; line-height: 1.4em; }
+
+  .graph { font-size: 0; }
+  .graph span { font-size: 18px; }
+  .graph .add { color: #55a532; }
+  .graph .del { color: #bd2c00; }
+  .graph .norm { color: #ddd; }
+
+  .fileHeader { padding: 0 10px; margin: 0 20px; margin-top: 20px; background-color: #f7f7f7; line-height: 28px; text-shadow: 0 1px 0 #fff; border: 1px solid #ddd; border-top-left-radius: 3px; border-top-right-radius: 3px; }
+  .fileHeader .total { color: #666; font-weight: bold; font-size: 11px; }
+  .fileHeader .name { padding-left: 20px; }
+
+  div.table { overflow-x: auto; overflow-y: hidden; border: 1px solid #ddd; border-top: 0; border-bottom-left-radius: 3px; border-bottom-right-radius: 3px; margin: 0 20px 15px 20px; }
+
+  .fileDiff tbody td { color: #333; vertical-align: middle; padding: 4px 10px; font-size: 12px; border-right: 1px solid #eee; }
+  .fileDiff tbody td:last-child { border-right: 0; }
+  .fileDiff tbody .line { width: 1%; min-widght: 50px; text-align: right; color: rgba(0,0,0,0.3); font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+  .fileDiff tbody .content { font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace; white-space: nowrap; }
+  .fileDiff tbody tr.add { background-color: #eaffea; }
+  .fileDiff tbody tr.add .line { background: #dbffdb; border-color: #c1e9c1; }
+  .fileDiff tbody tr.del { background-color: #ffecec; }
+  .fileDiff tbody tr.del .line { background: #ffdddd; border-color: #f1c0c0; }
+  .fileDiff tbody tr.chunk { border-color: #d5e4f2; background-color: #f8fafd; }
+  .fileDiff tbody tr.chunk td { color: rgba(0,0,0,0.3); }
+  .fileDiff tbody tr.chunk .line { background: #f0f5fa; border-color: #d5e4f2; }
+</style>
+
+<h2>Changed {{repo}} module "{{moduleName}}" v{{fromVersion}} - v{{toVersion}}</h2>
+
+<h3>Showing {{fileCount}} changed files with {{additions}} additions and {{deletions}} deletions.</h3>
+
+<table cellpadding="0" cellspacing="0" border="0" class="fileList">
+<tbody>
+  {{#files}}
+  <tr>
+    <td class="fileName" width="100%"><a href="">{{fromName}}</a></td>
+    <td class="additions">+{{additions}}</td>
+    <td class="deletions">-{{deletions}}</td>
+    <td class="graph">
+    {{#graph}}
+      {{#plus}}<span class="add">■</span>{{/plus}}
+      {{#minus}}<span class="del">■</span>{{/minus}}
+      {{#normal}}<span class="norm">■</span>{{/normal}}
+    {{/graph}}
+    </td>
+  </tr>
+  {{/files}}
+</tbody>
+</table>
+
+<h3>Commits</h3>
+
+{{#commits}}
+<p class="commit">
+{{{.}}}
+</p>
+{{/commits}}
+
+<h3>Files</h3>
+
+{{#files}}
+<a name="{{fromName}}"></a>
+<div class="fileHeader">
+  <span class="total">{{total}}</span>
+  <span class="graph" title="{{additions}} additions & {{deletions}} deletions">
+  {{#graph}}
+    {{#plus}}<span class="add">■</span>{{/plus}}
+    {{#minus}}<span class="del">■</span>{{/minus}}
+    {{#normal}}<span class="norm">■</span>{{/normal}}
+  {{/graph}}
+  </span>
+  <span class="name">{{name}}</span>
+</div>
+<div class="table">
+  <table cellpadding="0" cellspacing="0" border="0" class="fileDiff">
+  <tbody>
+    {{#lines}}
+    <tr class="{{type}}">
+      <td class="line">{{fromLine}}</td>
+      <td class="line">{{toLine}}</td>
+      <td class="content">{{{content}}}</td>
+    </tr>
+    {{/lines}}
+  </tbody>
+  </table>
+</div>
+
+{{/files}}
+
+</body>
+</html>

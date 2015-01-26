@@ -1,0 +1,51 @@
+{
+  "name": "swig-release-email",
+  "description": "",
+  "version": "0.0.1",
+  "homepage": "https://github.com/gilt/gilt-swig",
+  "keywords": [
+    "gulp",
+    "swig",
+    "package",
+    "mangement"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gilt/gilt-swig.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gilt/gilt-swig/issues"
+  },
+  "author": {
+    "name": "Gilt Groupe",
+    "email": "info@gilt.com",
+    "url": "http://gilt.com/"
+  },
+  "contributors": [
+    {
+      "name": "Andrew Powell",
+      "email": "powella@gilt.com",
+      "url": "https://github.com/shellscape/"
+    }
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/gilt/gilt-swig/blob/master/LICENSE"
+    }
+  ],
+  "engines": {
+    "node": ">= 0.11.x"
+  },
+  "dependencies": {
+    "co": "3.x",
+    "co-exec": "^1.1.0",
+    "gulp-util": "^3.0.2",
+    "inline-css": "^1.0.1",
+    "mustache": "^1.0.0",
+    "thunkify": "^2.1.2",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {},
+  "main": "index.js"
+}
