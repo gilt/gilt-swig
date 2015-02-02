@@ -1,7 +1,7 @@
 {
   "name": "swig-lint",
   "description": "",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -42,7 +42,7 @@
     "gulp-buffer" : "*",
     "gulp-handlebars" : "*",
     "gulp-insert" : "*",
-    "gulp-jshint" : "*",
+    "gulp-jshint" : "1.9.0",
     "gulp-recess-plus" : "git://github.com/shellscape/gulp-recess-plus.git",
     "gulp-util" : "*",
     "jshint-stylish": "*",
