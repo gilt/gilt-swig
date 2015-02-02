@@ -119,7 +119,14 @@ module.exports = function (gulp, swig) {
     // });
 
     // add main.js to the mix.
-    scripts.push(path.join(swig.temp, 'install', swig.pkg.name, 'public/js/', swig.pkg.name, 'main.js'));
+    var mainJsPath = path.join(swig.target.path, 'public/js/', swig.pkg.name, 'main.js');
+
+    // main.js is created in the system tempdir for modules.
+    if (swig.project.type !== 'webapp') {
+      mainJsPath = path.join(swig.temp, 'install', swig.pkg.name, 'public/js/', swig.pkg.name, 'main.js');
+    }
+
+    scripts.push(mainJsPath);
 
     done();
   });
