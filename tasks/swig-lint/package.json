@@ -42,7 +42,7 @@
     "gulp-buffer" : "*",
     "gulp-handlebars" : "*",
     "gulp-insert" : "*",
-    "gulp-jshint" : "1.9.0",
+    "gulp-jshint" : "1.9.2",
     "gulp-recess-plus" : "git://github.com/shellscape/gulp-recess-plus.git",
     "gulp-util" : "*",
     "jshint-stylish": "*",
