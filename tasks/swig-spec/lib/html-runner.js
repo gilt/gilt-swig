@@ -62,7 +62,7 @@
         baseUrl: options.baseUrl,
         deps: specFiles,
         callback: function () {
-          require(specNames, options.callback);
+          gilt.require(specNames, options.callback);
         }
       });
 
