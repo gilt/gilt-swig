@@ -61,8 +61,8 @@ module.exports = function (gulp, swig) {
       // into this:
       //  //assets[n].giltcdn.com/img/web-mosaic/1.0.0/nav/footer/footer-sprite.png
       replaceFn = function (match, leading, imgDir, target, asset) {
-        var min = 1,
-          max = 4,
+        var min = 5,
+          max = 8,
           assetServer = Math.floor(Math.random() * (max - min + 1)) + min,
           result;
 
