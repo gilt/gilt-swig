@@ -96,7 +96,7 @@ module.exports = function (swig) {
       }
 
       swig.log.error('lint-css', output + '. Please do some cleanup before proceeding.');
-      process.exit(0);
+      
     }
     else if (fatal) {
       output = 'You\'ve got ' + errors.toString().magenta + (errors > 1 ? ' errors' : ' error');
