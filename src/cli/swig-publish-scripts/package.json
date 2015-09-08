@@ -1,0 +1,19 @@
+{
+  "name": "@gilt-tech/swig-vendor",
+  "version": "0.1.5",
+  "description": "A utility module for wrapping vendor ui-modules on post-install",
+  "bin" : { "wrap" : "./wrap.js" },
+  "main": "wrap.js",
+  "author": "Andrew Powell",
+  "license": "ISC",
+  "gilt": {
+    "vendor": {
+      "globalName": "test"
+    }
+  },
+  "dependencies": {
+    "mustache": "^2.1.3",
+    "underscore": "^1.8.3",
+    "yargs": "^3.17.1"
+  }
+}

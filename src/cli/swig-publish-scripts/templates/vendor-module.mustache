@@ -1,0 +1,7 @@
+gilt.define('{{name}}', [{{{deps}}}],
+function ({{fnDeps}}) {
+
+  {{{content}}}
+
+  return exports.{{globalName}} || this.{{globalName}} || {{globalName}} || exports;
+});
