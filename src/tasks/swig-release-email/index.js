@@ -205,7 +205,7 @@ module.exports = function (gulp, swig) {
       try {
         result = yield swig.email({
           from: 'swig-noreply@gilt.com',
-          to: sender,
+          to: 'powella@gilt.com', //sender,
           replyTo: recipients,
           subject: '[module][' + swig.target.repo + '] ' + (tags.isNewModule ? 'New ' : '') +
                    diff.moduleName + ' v' + diff.fromVersion + ' → v' + diff.toVersion,

@@ -1,7 +1,7 @@
 {
   "name": "@gilt-tech/swig-release-email",
   "description": "",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -42,8 +42,8 @@
     "co-exec": "^1.1.0",
     "gulp-util": "^3.0.2",
     "inline-css": "^1.0.1",
-    "minimize": "^1.2.0",
-    "mustache": "^1.0.0",
+    "minimize": "^1.7.0",
+    "mustache": "^2.1.3",
     "thunkify": "^2.1.2",
     "underscore": "^1.7.0"
   },
