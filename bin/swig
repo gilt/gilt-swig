@@ -56,6 +56,13 @@ if [ "$NODE_ENV" != "production" ]; then
   fi
 
   nvm use 5 >/dev/null
+
+  # If we have NPM v3 installed, downgrade to v2 until issues are resolved.. see https://github.com/npm/npm/issues/9863 for an example
+  if [[ `npm -v` =~ 3\..* ]]; then
+    echo ". ${gray}Downgrading NPM to v2.x as neither we nor v3 is ready for this."
+    npm install -g npm@2.x >/dev/null
+    echo ". NPM version `npm -v` installed and active"
+  fi
 fi
 
 if [ "$1" == "init" ]; then
