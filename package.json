@@ -1,7 +1,7 @@
 {
   "name": "@gilt-tech/swig",
   "description": "Launching point for the Swig framework.",
-  "version": "0.8.11",
+  "version": "0.9.0",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -31,6 +31,11 @@
       "name": "Rory Haddon",
       "email": "rhaddon@gilt.com",
       "url": "https://github.com/roryh/"
+    },
+    {
+      "name": "Federico Giovagnoli",
+      "email": "fgiovagnoli@gilt.com",
+      "url": "https://github.com/Meesayen/"
     }
   ],
   "licenses": [
@@ -44,7 +49,7 @@
   },
   "dependencies": {
     "@gilt-tech/swig-assets": "^0.1.0",
-    "@gilt-tech/swig-bundle": "^0.1.0",
+    "@gilt-tech/swig-bundle": "^1.0.0",
     "@gilt-tech/swig-default": "^0.2.0",
     "@gilt-tech/swig-deps": "^0.1.0",
     "@gilt-tech/swig-install": "^0.1.0",
@@ -55,6 +60,7 @@
     "@gilt-tech/swig-release-email": "^0.1.0",
     "@gilt-tech/swig-spec": "^0.1.0",
     "@gilt-tech/swig-stub": "^0.1.0",
+    "@gilt-tech/swig-transpile-scripts": "^1.0.0",
     "@gilt-tech/swig-util": "^0.1.0",
     "co": "3.x",
     "colors": "*",
