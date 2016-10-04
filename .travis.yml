@@ -9,3 +9,8 @@ before_install:
 script:
   - npm install
   - gulp
+
+# Only build for master & pull-requests
+branches:
+  only:
+    - master
