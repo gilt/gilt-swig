@@ -48,7 +48,7 @@
     "node": ">= 5.x"
   },
   "dependencies": {
-    "@gilt-tech/swig-assets": "^0.1.0",
+    "@gilt-tech/swig-assets": "^1.0.0",
     "@gilt-tech/swig-bundle": "^1.0.0",
     "@gilt-tech/swig-default": "^0.2.0",
     "@gilt-tech/swig-deps": "^0.1.0",
