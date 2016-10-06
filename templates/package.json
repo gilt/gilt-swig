@@ -19,7 +19,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "gulp": "*",
-    "@gilt-tech/swig": "*"
+    "gulp": "^3.9.0",
+    "@gilt-tech/swig": "^0.8.0"
   }
 }
