@@ -53,16 +53,21 @@ if [ "$NODE_ENV" != "production" ]; then
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-  # run node 5 allow errors to pass through to the user.
+  # run node 5+ allow errors to pass through to the user.
 
-  if ls $NVM_DIR/versions/node/v5.* 1> /dev/null 2>&1; then
-    echo "Node v5 already installed" 1> /dev/null 2>&1
+  if ls $NVM_DIR/versions/node/v6.* 1> /dev/null 2>&1; then
+    echo "Node v6 is installed. Using it." 1> /dev/null 2>&1
+    nvm use 6 >/dev/null
   else
-    echo ".  ${gray}You don't have node v5 installed, doing that now:${reset}"
-    nvm install 5
-  fi
+    if ls $NVM_DIR/versions/node/v5.* 1> /dev/null 2>&1; then
+      echo "Node v5 is installed. Using it." 1> /dev/null 2>&1
+    else
+      echo ".  ${gray}You don't have node v5 installed, isntalling now:${reset}"
+      nvm install 5
+    fi
 
-  nvm use 5 >/dev/null
+    nvm use 5 >/dev/null
+  fi
 fi
 
 if [ "$firstParam" == "init" ]; then

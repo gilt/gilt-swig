@@ -29,7 +29,8 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
       });
     } catch (e) {
       swig.log.error('gulpfile.js tried to require some dev dependencies that failed. Are they installed?');
-      swig.log('     - ' + e.message);
+      swig.log(`      - ${e.message || e}`);
+      if (e.stack) swig.log(`        ${e.stack}`);
       process.exit(1);
     }
   }

@@ -14,13 +14,20 @@
 */
 
 module.exports = function (gulp) {
-
-  // this sets the --harmony and --harmony-proxies flags on the node process
-  // this allows us to use `gulp` or `node` on swig tasks without specifying
-  // those flags (it's a good thing)
-  require('harmonize')();
-
   require('colors');
+
+  // we don't need this from v6 and above
+  if (process.version.startsWith('v5')) {
+    // this sets the --harmony and --harmony-proxies flags on the node process
+    // this allows us to use `gulp` or `node` on swig tasks without specifying
+    // those flags (it's a good thing)
+    console.log('  - Hijacking the command to inject --harmony and --harmony-proxies flags'.yellow);
+    console.log('    to the node process.'.yellow);
+    console.log('    Consider upgrading to latest LTS version of node, instead.'.yellow);
+    console.log('    i.e. `nvm install --lts`'.yellow);
+    require('harmonize')();
+  }
+
 
   var _ = require('underscore'),
     path = require('path'),

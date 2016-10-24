@@ -1,7 +1,7 @@
 {
   "name": "@gilt-tech/swig",
   "description": "Launching point for the Swig framework.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
