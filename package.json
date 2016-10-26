@@ -66,7 +66,6 @@
     "colors": "*",
     "fs-extra": "^0.26.4",
     "globby": "^4.0.0",
-    "harmonize": "*",
     "inquirer": "^0.11.0",
     "less": "^2.5.3",
     "mustache": "^2.1.3",
