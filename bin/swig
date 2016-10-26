@@ -48,26 +48,7 @@ echo "·  ${red}swig${reset}         v$SWIG_VERSION"
 # version of node. It's not required in production, as production should be using
 # the right version of node natively.
 if [ "$NODE_ENV" != "production" ]; then
-
-  # source nvm for this session
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-  # run node 5+ allow errors to pass through to the user.
-
-  if ls $NVM_DIR/versions/node/v6.* 1> /dev/null 2>&1; then
-    echo "Node v6 is installed. Using it." 1> /dev/null 2>&1
-    nvm use 6 >/dev/null
-  else
-    if ls $NVM_DIR/versions/node/v5.* 1> /dev/null 2>&1; then
-      echo "Node v5 is installed. Using it." 1> /dev/null 2>&1
-    else
-      echo ".  ${gray}You don't have node v5 installed, isntalling now:${reset}"
-      nvm install 5
-    fi
-
-    nvm use 5 >/dev/null
-  fi
+  source $dir/check_node_version
 fi
 
 if [ "$firstParam" == "init" ]; then

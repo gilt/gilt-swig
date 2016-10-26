@@ -1,9 +1,14 @@
-### 1.2.0
+### 1.3.0
 - Improvement:
   - Removed call to `harmonize` module for Node 6 and above.
     The use of this module was creating an issue with `yarn` based installations.
   - We can now safely use `yarn`! 🍾
 
+
+### 1.2.0
+- Improvement:
+  - Better `node` version check.
+  - Made `node` v6 the minimum version required.
 
 ### 1.1.0
 - Improvement:

@@ -1,0 +1,76 @@
+#!/bin/sh
+#
+#  ________  ___       __   ___  ________
+# |\   ____\|\  \     |\  \|\  \|\   ____\
+# \ \  \___|\ \  \    \ \  \ \  \ \  \___|
+#  \ \_____  \ \  \  __\ \  \ \  \ \  \  ___
+#   \|____|\  \ \  \|\__\_\  \ \  \ \  \|\  \
+#     ____\_\  \ \____________\ \__\ \_______\
+#    |\_________\|____________|\|__|\|_______|
+#    \|_________|
+
+#    It's delicious.
+#    Brought to you by the fine folks at Gilt (http://github.com/gilt)
+
+# Set Desired Node version
+# This script will install the required version if the user does not have this version or one greater already installed.
+# comparison is done using major version number. Will not update to newer version of the same major version i.e. 4.1 --> 4.3
+DESIRED_NODE_MAJOR_VERSION=6
+
+# flag set if no previous version of node is found.
+NO_PREVIOUS_VERSION=false
+
+# source nvm for this session
+export NVM_DIR="$HOME/.nvm"
+NVM_SH_LOCATION="$NVM_DIR/nvm.sh"
+
+CURRENT_NVM_VERSION_GOOD=false
+
+# if user has no NVM fix it
+if ! nvm 2> /dev/null; then
+  if [ ! -e ${NVM_SH_LOCATION} ]; then
+    echo "NVM not detected in expected location (${NVM_SH_LOCATION}). Do you have it installed?"
+    exit 1
+  fi
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+fi
+
+# if there is a current version of node installed, get the version information
+if [ ! $(nvm ls current | egrep 'N\/A') ]; then
+  # some serious parsing of dodgy characters needed here just to get a number back for comparison below.
+  CURRENT_NODE_MAJOR_VERSION=$(nvm ls current | sed 's/.*v\([0-9]*\)\.[0-9]*\.[0-9]*.*/\1/' | sed 's/[^0-9]//g')
+
+  if [[ "${CURRENT_NODE_MAJOR_VERSION}" -ge "${DESIRED_NODE_MAJOR_VERSION}" ]]; then
+    CURRENT_NVM_VERSION_GOOD=true
+  fi
+fi
+
+# if the current version of node is not good enoguh, see what we have locally and use if good enough
+if [ "$CURRENT_NVM_VERSION_GOOD" = false ]; then
+  if [ $(nvm ls 'v*' | tail -n1 | egrep 'N\/A') ]; then
+    NO_PREVIOUS_VERSION=true
+  else
+    # get the major version of the latest installed version
+    MAJOR_VERSION_INSTALLED=$(nvm ls 'v*' | tail -n1 | sed 's/.*v\([0-9]*\)\.[0-9]*\.[0-9]*/\1/')
+  fi
+
+  #echo "NO_PREVIOUS_VERSION: $NO_PREVIOUS_VERSION"
+  #echo "MAJOR_VERSION_INSTALLED: $MAJOR_VERSION_INSTALLED"
+  #echo "DESIRED_NODE_VERSION: $DESIRED_NODE_VERSION"
+
+  if [ "$NO_PREVIOUS_VERSION" = true ] || [[ "$MAJOR_VERSION_INSTALLED" -lt "$DESIRED_NODE_MAJOR_VERSION" ]]; then
+    # node version installed is less than desired version.
+    echo ".  ${gray}You don't have node >= v${DESIRED_NODE_MAJOR_VERSION} installed, doing that now:${reset}"
+    nvm install ${DESIRED_NODE_MAJOR_VERSION}
+    echo "Installing global modules: gulp, @gilt-tech/swig ..."
+    npm install -g gulp @gilt-tech/swig > /dev/null
+    MAJOR_VERSION_INSTALLED=${DESIRED_NODE_MAJOR_VERSION}
+  else
+    echo "Using installed node v${NEWEST_INSTALLED_VERSION}"
+  fi
+
+
+  nvm use ${DESIRED_NODE_MAJOR_VERSION} >/dev/null
+fi
+
