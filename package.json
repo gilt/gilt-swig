@@ -1,7 +1,7 @@
 {
   "name": "@gilt-tech/swig",
   "description": "Launching point for the Swig framework.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "homepage": "https://github.com/gilt/gilt-swig",
   "keywords": [
     "gulp",
@@ -52,7 +52,7 @@
     "@gilt-tech/swig-bundle": "^1.0.0",
     "@gilt-tech/swig-default": "^0.2.0",
     "@gilt-tech/swig-deps": "^0.1.0",
-    "@gilt-tech/swig-install": "^0.1.0",
+    "@gilt-tech/swig-install": "^1.0.0",
     "@gilt-tech/swig-lint": "^0.3.0",
     "@gilt-tech/swig-merge-css": "^0.1.0",
     "@gilt-tech/swig-minify": "^0.2.0",

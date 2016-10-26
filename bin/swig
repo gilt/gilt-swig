@@ -52,7 +52,8 @@ if [ "$NODE_ENV" != "production" ]; then
 fi
 
 if [ "$firstParam" == "init" ]; then
-  node --harmony "$dir/../lib/init.js"
+  node --harmony "$dir/../lib/init.js" $secondParam
+  # --use-yarn
   exit
 fi
 
