@@ -1,13 +1,13 @@
 sudo: false
 language: node_js
 node_js:
-  - "5.5"
+  - "6"
 
 before_install:
-  - npm install gulp -g
+  - npm install yarn -g
 
 script:
-  - npm install
+  - yarn
   - gulp
 
 # Only build for master & pull-requests
