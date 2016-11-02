@@ -6,8 +6,10 @@ node_js:
 before_install:
   - npm install yarn -g
 
-script:
+install:
   - yarn
+
+script:
   - gulp
 
 # Only build for master & pull-requests
