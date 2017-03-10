@@ -1,3 +1,6 @@
+## [DEPRECATED REPOSITORY]
+We moved all the works to https://github.com/gilt/swig
+
 Swig [![Build Status](https://travis-ci.org/gilt/gilt-swig.svg)](https://travis-ci.org/gilt/gilt-swig)
 =========
 
